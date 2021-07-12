@@ -14,6 +14,7 @@ export class MainComponent implements AfterViewInit {
   public showBackdrop = false;
   public closeOnDocumentClick = false;
   url: any;
+  show: any = true;
 
   constructor(protected router: Router) {
     this.url = this.router;
@@ -34,6 +35,14 @@ export class MainComponent implements AfterViewInit {
   }
   logout(){
     this.router.navigateByUrl('/login');
+  }
+  controlSideBar(){
+   if(this.show){
+    this.sideBar.hide();
+   }
+   else 
+   this.sideBar.show();
+   this.show =!this.show;
   }
   public btnClick(): void {
     if ((!(document.URL).includes('login')))
