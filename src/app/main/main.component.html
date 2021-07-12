@@ -1,5 +1,5 @@
 <div class="planner-wrapper">
-  <ejs-sidebar #sideBar id="plannerSiderBar" [enableGestures]='false' [showBackdrop]='showBackdrop'
+  <ejs-sidebar *ngIf="!((url.url).includes('login'))" #sideBar id="plannerSiderBar" [enableGestures]='false' [showBackdrop]='showBackdrop'
     [closeOnDocumentClick]='closeOnDocumentClick'>
     <div class="dock">
       <div class="info align-center">
@@ -40,7 +40,7 @@
     </div>
   </ejs-sidebar>
   <main>
-    <div class="planner-header">
+    <div *ngIf="!((url.url).includes('login'))" class="planner-header">
       <div class="side-bar-opener">
         <span class="open-icon e-icons" (click)='btnClick()'></span>
       </div>
@@ -50,7 +50,7 @@
       </div>
       <div class='logout-container'>
         <div class="logout-icon-container"><span class="icon-logout logout-image"></span></div>
-        <span class='logout-name'>Logout</span>
+        <a (click)="logout()" class='logout-name'>Logout</a>
       </div>
     </div>
     <router-outlet></router-outlet>

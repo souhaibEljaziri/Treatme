@@ -1,6 +1,7 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { Browser } from '@syncfusion/ej2-base';
 import { SidebarComponent } from '@syncfusion/ej2-angular-navigations';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -12,8 +13,10 @@ export class MainComponent implements AfterViewInit {
   public sideBar: SidebarComponent;
   public showBackdrop = false;
   public closeOnDocumentClick = false;
+  url: any;
 
-  constructor() {
+  constructor(protected router: Router) {
+    this.url = this.router;
     document.body.classList.add('main-page');
     if (Browser.isDevice) {
       this.showBackdrop = true;
@@ -22,14 +25,21 @@ export class MainComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
+    
+    // this.url = this.router.url;
     if (Browser.isDevice) {
       document.querySelector('.planner-header').classList.add('device-header');
       document.querySelector('.planner-wrapper').classList.add('device-wrapper');
     }
   }
-
+  logout(){
+    this.router.navigateByUrl('/login');
+  }
   public btnClick(): void {
-    this.sideBar.show();
+    if ((!(document.URL).includes('login')))
+      this.sideBar.show();
+    else
+      this.sideBar.hide();
   }
 
   public onItemClick(args: any): void {

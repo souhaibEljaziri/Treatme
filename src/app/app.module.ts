@@ -30,6 +30,7 @@ import { OxygenComponent } from './oxygen/oxygen.component';
 import { RecentActivityComponent } from './recent-activity/recent-activity.component';
 import { PreferenceComponent } from './preference/preference.component';
 import { MainComponent } from './main/main.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { MainComponent } from './main/main.component';
     OxygenComponent,
     RecentActivityComponent,
     PreferenceComponent,
-    MainComponent
+    MainComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
