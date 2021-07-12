@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  patientsData, doctorsData, specializationData, activityData, hospitalData,
+  patientsData, oxygenData, doctorsData, specializationData, activityData, hospitalData,
   bloodGroupData, waitingList, shift1BlockData, shift2BlockData, shift3BlockData
 } from './datasource';
 import { EventFieldsMapping } from '@syncfusion/ej2-schedule';
@@ -13,12 +13,14 @@ import { createElement, remove, removeClass } from '@syncfusion/ej2-base';
 })
 export class DataService {
   public patientsData: Record<string, any>[];
+  public oxygenData: Record<string, any>[];
   public doctorsData: Record<string, any>[];
   public calendarSettings: CalendarSettings;
   public selectedDate: Date;
   public eventFields: EventFieldsMapping;
   public activeDoctorData: Record<string, any>;
   public activePatientData: Record<string, any>;
+  public activeOxygenData: Record<string, any>;
   public specialistData: Record<string, any>[];
   public activityData: Record<string, any>[];
   public hospitalData: Record<string, any>[];
@@ -30,6 +32,7 @@ export class DataService {
 
   constructor() {
     this.patientsData = patientsData as Record<string, any>[];
+    this.oxygenData = oxygenData as Record<string, any>[];
     this.doctorsData = doctorsData as Record<string, any>[];
     this.calendarSettings = {
       bookingColor: 'Doctors',
@@ -44,6 +47,7 @@ export class DataService {
     this.selectedDate = new Date(2021, 7, 5);
     this.activeDoctorData = this.doctorsData[0];
     this.activePatientData = this.patientsData[0];
+    this.activeOxygenData = this.oxygenData[0];
     this.specialistData = specializationData as Record<string, any>[];
     this.activityData = activityData;
     this.hospitalData = hospitalData;
@@ -89,6 +93,14 @@ export class DataService {
     return this.activePatientData;
   }
 
+  public setActiveOxygenData(data: Record<string, any>): void {
+    this.activeOxygenData = data;
+  }
+
+  public getActiveOxygenData(): Record<string, any> {
+    return this.activeOxygenData;
+  }
+
   public setDoctorsData(data: Record<string, any>[]): void {
     this.doctorsData = data;
   }
@@ -111,6 +123,14 @@ export class DataService {
 
   public getPatientsData(): Record<string, any>[] {
     return this.patientsData;
+  }
+
+  public setOxygenData(data: Record<string, any>[]): void {
+    this.oxygenData = data;
+  }
+
+  public getOxygenData(): Record<string, any>[] {
+    return this.oxygenData;
   }
 
   public addActivityData(data: Record<string, any>): void {
