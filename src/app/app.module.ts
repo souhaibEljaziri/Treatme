@@ -19,12 +19,14 @@ import { AppComponent } from './app.component';
 import { AboutComponent } from './about/about.component';
 import { AddEditDoctorComponent } from './add-edit-doctor/add-edit-doctor.component';
 import { AddEditPatientComponent } from './add-edit-patient/add-edit-patient.component';
+import { AddEditOxygenComponent } from './add-edit-oxygen/add-edit-oxygen.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DoctorDetailsComponent } from './doctor-details/doctor-details.component';
 import { DoctorAvailabilityComponent } from './doctor-availability/doctor-availability.component';
 import { DoctorsComponent } from './doctors/doctors.component';
 import { PatientsComponent } from './patients/patients.component';
+import { OxygenComponent } from './oxygen/oxygen.component';
 import { RecentActivityComponent } from './recent-activity/recent-activity.component';
 import { PreferenceComponent } from './preference/preference.component';
 import { MainComponent } from './main/main.component';
@@ -35,12 +37,14 @@ import { MainComponent } from './main/main.component';
     AboutComponent,
     AddEditDoctorComponent,
     AddEditPatientComponent,
+    AddEditOxygenComponent,
     CalendarComponent,
     DashboardComponent,
     DoctorDetailsComponent,
     DoctorAvailabilityComponent,
     DoctorsComponent,
     PatientsComponent,
+    OxygenComponent,
     RecentActivityComponent,
     PreferenceComponent,
     MainComponent
