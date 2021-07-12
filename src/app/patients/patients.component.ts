@@ -70,7 +70,7 @@ export class PatientsComponent implements OnInit {
         }
         (args.dialog as Dialog).element.querySelector('#' + field).innerHTML = value;
       });
-      this.gridDialog.element.querySelector('.history-row').appendChild(this.getHistoryDetails());
+      //this.gridDialog.element.querySelector('.history-row').appendChild(this.getHistoryDetails());
       const editButtonElement: HTMLElement = createElement('button', {
         className: 'edit-patient',
         id: 'edit',
@@ -137,7 +137,6 @@ export class PatientsComponent implements OnInit {
     }
     return historyElement;
   }
-
   public getDoctorName(id: number): string {
     const activeDoctor: Record<string, any>[] = this.doctorsData.filter((item: Record<string, any>) => item.Id === id);
     return activeDoctor[0].Name;

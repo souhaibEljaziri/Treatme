@@ -504,6 +504,34 @@ export const patientsData: Record<string, any>[] = [
     }
 ];
 
+export const oxygenData: Record<string, any>[] = [
+    {
+        Id: 1,
+        Name: 'Kamel',
+        WaterCapacity: '10 Litres',
+        OxygenCapacity: "1500 Litres",
+        Status: 'Available',
+        Price: '50$'
+    },
+    {
+        Id: 2,
+        Name: 'Farid',
+        WaterCapacity: '5 Litres',
+        OxygenCapacity: "1000 Litres",
+        Status: 'Sold',
+        Price: '75$'
+    },
+    {
+        Id: 3,
+        Name: 'Samir',
+        WaterCapacity: '15 Litres',
+        OxygenCapacity: "2000 Litres",
+        Status: 'Available',
+        Price: '100$'
+    }
+
+];
+
 export const waitingList: Record<string, any>[] = [
     {
         Id: 1,

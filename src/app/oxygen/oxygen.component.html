@@ -1,0 +1,100 @@
+<div id='oxygen-wrapper' class="planner-oxygen-wrapper">
+    <header>
+        <div class="module-title">
+            <div class='title'>OXYGEN LIST</div>
+            <div class='underline'></div>
+        </div>
+        <div class='add-oxygen' (click)="onAddOxygen()">
+            <div class="e-icon-add e-icons"></div>
+            <div class="add-oxygen-label">Add New</div>
+        </div>
+    </header>
+    <div class="oxygen-detail-wrapper">
+        <div class="oxygen-operations">
+            <div id='searchTemplate' class='search-wrapper planner-oxygen-search'>
+                <div class="e-input-group" role="search">
+                    <input id="schedule_searchbar" class="e-input" name="input" type="search"
+                        placeholder="Search Oxygen" (keyup)="oxygenSearch($event)" />
+                    <span class="e-clear-icon" aria-label="close" role="button"
+                        (click)="oxygenSearchCleared($event)"></span>
+                    <span id="schedule_searchbutton" class="e-input-group-icon search-icon e-icons" tabindex="-1"
+                        title="Search" aria-label="search"></span>
+                </div>
+            </div>
+            <button ejs-button cssClass="e-normal add-details" [isPrimary]="true" (click)='onAddOxygen()'>Add
+                New Oxygen</button>
+        </div>
+        <div class="oxygen-display">
+            <ejs-grid #gridObj [dataSource]='filteredOxygen' [editSettings]='editSettings'
+                (actionComplete)='onDataEdit($event)'>
+                <e-columns>
+                    <e-column field='Id' width='50' headerText='ID' textAlign='Left'></e-column>
+                    <e-column field='Supplier' width='100' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <span class="oxygen-name" (click)='onOxygenClick($event)'>{{data.Name}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field='WaterCapacity' headerText='Water Capacity' width='80' textAlign='Left'></e-column>
+                    <e-column field='OxygenCapacity' headerText='Oxygen Capacity' width='100' textAlign='Left'></e-column>
+                    <e-column field='Status' width='150' textAlign='Left'></e-column>
+                    <e-column field='Price' width='100' textAlign='Left'></e-column>
+                </e-columns>
+                <ng-template #editSettingsTemplate let-data>
+                    <div class='grid-edit-dialog-oxygen'>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8 text-display">
+                                <div class="e-card-content">
+                                    <div class='field-row'>
+                                        <label> Oxygen Id </label><span id='Id'>{{activeOxygenData.Id}}</span>
+                                    </div>
+                                    <div class='field-row'>
+                                        <label> Supplier Name </label><span id='Name'>{{activeOxygenData.Supplier}}</span>
+                                    </div>
+                                    <div class='field-row'>
+                                        <label> Water Capacity </label><span id='WaterCapacity'>{{activeOxygenData.WaterCapacity}}</span>
+                                    </div>
+                                    <div class='field-row'>
+                                        <label> Oxygen Capacity </label><span id='OxygenCapacity'>{{activeOxygenData.OxygenCapacity}}</span>
+                                    </div>
+                                    <div class='field-row'>
+                                        <label> Status </label><span id='Status'>{{activeOxygenData.Status}}</span>
+                                    </div>
+                                    <div class='field-row'>
+                                        <label> Price </label><span id='Price'>{{activeOxygenData.Price}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 text-display">
+                                <div class="e-card-content">
+                                    <div>
+                                      <img class="oxygen-image" src="./assets/images/Oxygen/{{activeOxygenData.Id}}.jpg" alt="Oxygen" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ejs-grid>
+        </div>
+    </div>
+</div>
+<app-add-edit-oxygen #addEditOxygenObj (refreshEvent)="gridRefresh()"></app-add-edit-oxygen>
+<div class="delete-confirmation-container" style="display:none">
+    <ejs-dialog #deleteConfirmationDialogObj width='445px' cssClass='break-hour-dialog' [isModal]='true'
+        [visible]='false' [animationSettings]='animationSettings' header='Oxygen Details' [showCloseIcon]='true'
+        target='body'>
+        <ng-template #content>
+            <form>
+                <div>
+                    Are you sure you want to delete this Oxygen?
+                </div>
+            </form>
+        </ng-template>
+        <ng-template #footerTemplate>
+            <div class="button-container">
+                <button ejs-button cssClass="e-normal" [isPrimary]="true" (click)='onDeleteClick()'>Ok</button>
+                <button ejs-button cssClass="e-normal" (click)='onDeleteCancelClick()'>Cancel</button>
+            </div>
+        </ng-template>
+    </ejs-dialog>
+</div>
