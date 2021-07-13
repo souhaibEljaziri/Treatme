@@ -20,10 +20,9 @@ export class AddEditOxygenComponent {
   public newOxygenObj: DialogComponent;
   public animationSettings: Record<string, any> = { effect: 'None' };
   public title = 'New Oxygen';
-  public selectedGender = 'Male';
-  public dobValue: Date = new Date(1996, 0, 31);
   public dialogState: string;
-  public bloodGroupData: Record<string, any>[];
+  public waterCapacityData: Record<string, any>[];
+  public oxygenCapacityData: Record<string, any>[];
   public fields: Record<string, any> = { text: 'Text', value: 'Value' };
   public oxygenData: Record<string, any>[];
   public activeOxygenData: Record<string, any>;
@@ -31,7 +30,8 @@ export class AddEditOxygenComponent {
   public doctorsData: Record<string, any>[];
 
   constructor(private dataService: DataService) {
-    this.bloodGroupData = this.dataService.bloodGroupData;
+    this.waterCapacityData = this.dataService.waterCapacityData;
+    this.oxygenCapacityData = this.dataService.oxygenCapacityData;
     this.oxygenData = this.dataService.getOxygenData();
     this.hospitalData = this.dataService.getHospitalData();
     this.doctorsData = this.dataService.getDoctorsData();
@@ -50,13 +50,13 @@ export class AddEditOxygenComponent {
   }
 
   public onSaveClick(): void {
-    const formElementContainer: HTMLElement = document.querySelector('.new-patient-dialog #new-patient-form');
+    const formElementContainer: HTMLElement = document.querySelector('.new-oxygen-dialog #new-oxygen-form');
     if (formElementContainer && formElementContainer.classList.contains('e-formvalidator') &&
       !((formElementContainer as EJ2Instance).ej2_instances[0] as FormValidator).validate()) {
       return;
     }
     const obj: Record<string, any> = this.dialogState === 'new' ? {} : this.activeOxygenData;
-    const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-patient-dialog .e-field'));
+    const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-oxygen-dialog .e-field'));
     for (const curElement of formElement) {
       let columnName: string = curElement.querySelector('input').name;
       const isDropElement: boolean = curElement.classList.contains('e-ddl');
@@ -66,20 +66,20 @@ export class AddEditOxygenComponent {
           columnName = curElement.querySelector('select').name;
           const instance: DropDownList = (curElement.parentElement as EJ2Instance).ej2_instances[0] as DropDownList;
           obj[columnName] = instance.value;
-        } else if (columnName === 'DOB' && isDatePickElement) {
-          const instance: DatePicker = (curElement.parentElement as EJ2Instance).ej2_instances[0] as DatePicker;
-          obj[columnName] = instance.value;
-        } else if (columnName === 'Gender') {
-          obj[columnName] = this.selectedGender;
-        } else {
+        } else if (columnName === 'Price' && curElement.querySelector('input').value === '') {
+          obj[columnName] = 'Free'
+        }
+         else {
           obj[columnName] = curElement.querySelector('input').value;
+
         }
       }
     }
     this.oxygenData = this.dataService.getOxygenData();
     if (this.dialogState === 'new') {
       obj.Id = Math.max.apply(Math, this.oxygenData.map((data: Record<string, any>) => data.Id)) + 1;
-      obj.NewOxygenClass = 'new-patient';
+      obj.NewOxygenClass = 'new-oxygen';
+      obj['Status'] = 'Available'
       this.oxygenData.push(obj);
     } else {
       this.activeOxygenData = obj;
@@ -91,10 +91,10 @@ export class AddEditOxygenComponent {
       this.dataService.setActiveOxygenData(this.activeOxygenData);
     }
     const activityObj: Record<string, any> = {
-      Name: this.dialogState === 'new' ? 'Added New Patient' : 'Updated Patient',
+      Name: this.dialogState === 'new' ? 'Added New Oxygen' : 'Updated Oxygen',
       Message: `${obj.Name} for ${obj.Symptoms}`,
       Time: '10 mins ago',
-      Type: 'patient',
+      Type: 'oxygen',
       ActivityTime: new Date()
     };
     this.dataService.addActivityData(activityObj);
@@ -105,8 +105,8 @@ export class AddEditOxygenComponent {
   }
 
   public resetFormFields(): void {
-    const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-patient-dialog .e-field'));
-    this.dataService.destroyErrorElement(document.querySelector('#new-patient-form'), formElement);
+    const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-oxygen-dialog .e-field'));
+    this.dataService.destroyErrorElement(document.querySelector('#new-oxygen-form'), formElement);
     for (const curElement of formElement) {
       let columnName: string = curElement.querySelector('input').name;
       const isDropElement: boolean = curElement.classList.contains('e-ddl');
@@ -116,20 +116,11 @@ export class AddEditOxygenComponent {
           columnName = curElement.querySelector('select').name;
           const instance: DropDownList = (curElement.parentElement as EJ2Instance).ej2_instances[0] as DropDownList;
           instance.value = (instance as any).dataSource[0];
-        } else if (columnName === 'DOB' && isDatePickElement) {
-          const instance: DatePicker = (curElement.parentElement as EJ2Instance).ej2_instances[0] as DatePicker;
-          instance.value = new Date();
-        } else if (columnName === 'Gender') {
-          curElement.querySelectorAll('input')[0].checked = true;
         } else {
           curElement.querySelector('input').value = '';
         }
       }
     }
-  }
-
-  public onGenderChange(args: Record<string, any>): void {
-    this.selectedGender = args.target.value;
   }
 
   public showDetails(): void {
@@ -138,7 +129,7 @@ export class AddEditOxygenComponent {
     this.newOxygenObj.show();
     this.activeOxygenData = this.dataService.getActiveOxygenData();
     const obj: Record<string, any> = this.activeOxygenData;
-    const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-patient-dialog .e-field'));
+    const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-oxygen-dialog .e-field'));
     for (const curElement of formElement) {
       let columnName: string = curElement.querySelector('input').name;
       const isCustomElement: boolean = curElement.classList.contains('e-ddl');
@@ -149,24 +140,17 @@ export class AddEditOxygenComponent {
           const instance: DropDownList = (curElement.parentElement as EJ2Instance).ej2_instances[0] as DropDownList;
           instance.value = obj[columnName] as string;
           instance.dataBind();
-        } else if (columnName === 'DOB' && isDatePickElement) {
-          const instance: DatePicker = (curElement.parentElement as EJ2Instance).ej2_instances[0] as DatePicker;
-          instance.value = obj[columnName] as Date || null;
-        } else if (columnName === 'Gender') {
-          if (obj[columnName] === 'Male') {
-            curElement.querySelectorAll('input')[0].checked = true;
-          } else {
-            curElement.querySelectorAll('input')[1].checked = true;
-          }
+        } else if (columnName === 'Price' && obj[columnName] === 'Free') {
+           obj[columnName] = '';
         } else {
-          curElement.querySelector('input').value = obj[columnName] as string;
+           curElement.querySelector('input').value = obj[columnName] as string;
         }
       }
     }
   }
 
   public onBeforeOpen(args: BeforeOpenEventArgs): void {
-    const formElement: HTMLFormElement = args.element.querySelector('#new-patient-form');
+    const formElement: HTMLFormElement = args.element.querySelector('#new-oxygen-form');
     if (formElement && formElement.ej2_instances) {
       return;
     }
@@ -179,10 +163,7 @@ export class AddEditOxygenComponent {
       }
     };
     const rules: Record<string, any> = {};
-    rules.Name = { required: [true, 'Enter valid name'] };
-    rules.DOB = { required: true, date: [true, 'Select valid DOB'] };
-    rules.Mobile = { required: [customFn, 'Enter valid mobile number'] };
-    rules.Email = { required: [true, 'Enter valid email'], email: [true, 'Email address is invalid'] };
+    rules.Name = { required: [true, 'Enter valid supplier name'] };
     this.dataService.renderFormValidator(formElement, rules, this.newOxygenObj.element);
   }
 }
