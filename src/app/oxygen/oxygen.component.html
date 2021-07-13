@@ -34,10 +34,17 @@
                             <span class="oxygen-name" (click)='onOxygenClick($event)'>{{data.Name}}</span>
                         </ng-template>
                     </e-column>
-                    <e-column field='WaterCapacity' headerText='Water Capacity' width='80' textAlign='Left'></e-column>
+                    <e-column field='WaterCapacity' headerText='Water Capacity' width='100' textAlign='Left'></e-column>
                     <e-column field='OxygenCapacity' headerText='Oxygen Capacity' width='100' textAlign='Left'></e-column>
-                    <e-column field='Status' width='150' textAlign='Left'></e-column>
-                    <e-column field='Price' width='100' textAlign='Left'></e-column>
+                    <e-column field='Status' width='80' textAlign='Left'></e-column>
+                    <e-column field='Price' width='80' textAlign='Left'></e-column>
+                    <e-column field='Action' width='80' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <button ejs-button cssClass="e-success e-round add-details" (click)='onRequestOxygen()'>
+                                <i class="fa fa-shopping-basket"></i>
+                            </button>
+                        </ng-template>
+                    </e-column>
                 </e-columns>
                 <ng-template #editSettingsTemplate let-data>
                     <div class='grid-edit-dialog-oxygen'>

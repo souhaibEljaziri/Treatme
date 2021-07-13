@@ -1013,6 +1013,21 @@ export const bloodGroupData: Record<string, any>[] = [
     { Value: 'O-', Text: 'O-' }
 ];
 
+export const waterCapacityData: Record<string, any>[] = [
+    { Value: '5 Litres', Text: '5 Litres' },
+    { Value: '10 Litres', Text: '10 Litres' },
+    { Value: '15 Litres', Text: '15 Litres' },
+    { Value: '20 Litres', Text: '20 Litres' },
+    { Value: '25 Litres', Text: '25 Litres' },
+];
+
+export const oxygenCapacityData: Record<string, any>[] = [
+    { Value: '500 Litres', Text: '500 Litres' },
+    { Value: '1000 Litres', Text: '1000 Litres' },
+    { Value: '1500 Litres', Text: '1500 Litres' },
+    { Value: '2000 Litres', Text: '2000 Litres' },
+];
+
 export const dayOfWeekList: Record<string, any>[] = [
     { Value: 0, Text: 'Sunday' },
     { Value: 1, Text: 'Monday' },

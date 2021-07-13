@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   patientsData, oxygenData, doctorsData, specializationData, activityData, hospitalData,
-  bloodGroupData, waitingList, shift1BlockData, shift2BlockData, shift3BlockData
+  bloodGroupData, waterCapacityData, oxygenCapacityData, waitingList, shift1BlockData, shift2BlockData, shift3BlockData
 } from './datasource';
 import { EventFieldsMapping } from '@syncfusion/ej2-schedule';
 import { CalendarSettings } from './calendar-settings';
@@ -25,6 +25,8 @@ export class DataService {
   public activityData: Record<string, any>[];
   public hospitalData: Record<string, any>[];
   public bloodGroupData: Record<string, any>[] = bloodGroupData;
+  public waterCapacityData: Record<string, any>[] = waterCapacityData;
+  public oxygenCapacityData: Record<string, any>[] = oxygenCapacityData;
   public waitingList: Record<string, any>[] = waitingList;
   public shift1BlockEvents: Record<string, any>[] = shift1BlockData;
   public shift2BlockEvents: Record<string, any>[] = shift2BlockData;
