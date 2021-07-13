@@ -5,6 +5,7 @@ import { Dialog, DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { Button } from '@syncfusion/ej2-angular-buttons';
 import { EditService, PageService, EditSettingsModel, GridComponent, DialogEditEventArgs } from '@syncfusion/ej2-angular-grids';
 import { AddEditOxygenComponent } from '../add-edit-oxygen/add-edit-oxygen.component';
+//import { RequestOxygenComponent } from '../request-oxygen/request-oxygen.component';
 import { DataService } from '../data.service';
 
 @Component({
@@ -17,6 +18,7 @@ import { DataService } from '../data.service';
 export class OxygenComponent implements OnInit {
   @ViewChild('gridObj') gridObj: GridComponent;
   @ViewChild('addEditOxygenObj') addEditOxygenObj: AddEditOxygenComponent;
+  //@ViewChild('onRequestOxygenObj') onRequestOxygenObj: RequestOxygenComponent;
   @ViewChild('deleteConfirmationDialogObj')
   public deleteConfirmationDialogObj: DialogComponent;
   public oxygenData: Record<string, any>[];
@@ -110,6 +112,11 @@ export class OxygenComponent implements OnInit {
   }
 
   public onAddOxygen(): void {
+    this.addEditOxygenObj.onAddOxygen();
+  }
+
+  public onRequestOxygen(): void {
+    //this.onRequestOxygenObj.onRequestOxygen();
     this.addEditOxygenObj.onAddOxygen();
   }
 
