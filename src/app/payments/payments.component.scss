@@ -1,8 +1,7 @@
 @import '../common.scss';
 
-.planner-patient-wrapper {
+.planner-payment-wrapper {
   margin: 50px;
-
   header {
     display: flex;
 
@@ -10,7 +9,7 @@
       margin-left: 16.5px;
     }
 
-    .add-patient {
+    .add-payment {
       flex: initial;
       display: none;
 
@@ -24,7 +23,7 @@
         }
       }
 
-      .add-patient-label {
+      .add-payment-label {
         font-weight: 600;
         font-size: 13px;
         color: $planner-element-bg-color;
@@ -34,12 +33,12 @@
     }
   }
 
-  .patients-detail-wrapper {
-    .patient-operations {
+  .payments-detail-wrapper {
+    .payment-operations {
       display: flex;
       justify-content: flex-end;
 
-      .planner-patient-search.search-wrapper {
+      .planner-payment-search.search-wrapper {
         width: 190px;
         margin-right: 16px;
 
@@ -54,25 +53,14 @@
         }
       }
     }
+    
 
-    .patient-display {
+    .payment-display {
       margin-top: 17px;
       table.e-table {
         th {
           background-color: $planner-table-th-bg-color;
           color: $planner-table-th-color;
-        }
-      }
-      .e-grid {
-        .e-gridcontent {
-          tr.e-row {
-            td.e-rowcell {
-              .patient-name {
-                color: $planner-element-bg-color;
-                cursor: pointer;
-              }
-            }
-          }
         }
       }
     }
@@ -147,7 +135,7 @@
 }
 
 @media (max-width: 850px) {
-  .planner-patient-wrapper {
+  .planner-payment-wrapper {
     margin: 20px 10px;
 
     header {
@@ -156,34 +144,34 @@
         flex: 1;
       }
 
-      .add-patient {
+      .add-payment {
         margin-right: 6px;
         display: flex;
         cursor: pointer;
 
-        .add-patient-label {
+        .add-payment-label {
           font-weight: 500;
         }
       }
     }
 
-    .patients-detail-wrapper {
+    .payments-detail-wrapper {
       margin: 0;
 
-      .patient-operations {
+      .payment-operations {
         margin-top: 3.3%;
 
         .e-btn {
           display: none;
         }
 
-        .planner-patient-search.search-wrapper {
+        .planner-payment-search.search-wrapper {
           flex: 1;
           margin: 0;
         }
       }
 
-      .patient-display {
+      .payment-display {
         margin-top: 3.3%;
       }
     }

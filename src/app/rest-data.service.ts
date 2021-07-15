@@ -7,11 +7,12 @@ import { EventFieldsMapping } from '@syncfusion/ej2-schedule';
 import { CalendarSettings } from './calendar-settings';
 import { FormValidator, FormValidatorModel } from '@syncfusion/ej2-angular-inputs';
 import { createElement, remove, removeClass } from '@syncfusion/ej2-base';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
+export class RestDataService {
   public patientsData: Record<string, any>[];
   public oxygenData: Record<string, any>[];
   public paymentsData: Record<string, any>[];
@@ -34,7 +35,9 @@ export class DataService {
   public shift2BlockEvents: Record<string, any>[] = shift2BlockData;
   public shift3BlockEvents: Record<string, any>[] = shift3BlockData;
 
-  constructor() {
+  private REST_API_SERVER = "http://127.0.0.1:8000/payments/all";
+
+  constructor(private httpClient: HttpClient) {
     this.patientsData = patientsData as Record<string, any>[];
     this.oxygenData = oxygenData as Record<string, any>[];
     this.paymentsData = paymentsData as Record<string, any>[];
@@ -57,6 +60,10 @@ export class DataService {
     this.specialistData = specializationData as Record<string, any>[];
     this.activityData = activityData;
     this.hospitalData = hospitalData;
+  }
+
+  public sendGetRequest(){
+    return this.httpClient.get(this.REST_API_SERVER);
   }
 
   public onUpdateData(field: string, value: any, className: string, activeData: any): void {

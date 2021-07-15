@@ -82,6 +82,12 @@
     .e-card-content {
       padding: 0px;
       line-height: 30px;
+      table.e-table {
+        th {
+          background-color: $planner-table-th-bg-color;
+          color: $planner-table-th-color;
+        }
+      }
     }
   }
 

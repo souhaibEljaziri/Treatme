@@ -1,0 +1,43 @@
+<div id='payment-wrapper' class="planner-payment-wrapper">
+  <header>
+      <div class="module-title">
+          <div class='title'>PAYMENTS LIST</div>
+          <div class='underline'></div>
+      </div>
+  </header>
+  <div class="payments-detail-wrapper">
+      <div class="payment-operations">
+          <div id='searchTemplate' class='search-wrapper planner-payment-search'>
+              <div class="e-input-group" role="search">
+                  <input id="schedule_searchbar" class="e-input" name="input" type="search"
+                      placeholder="Search Payment" (keyup)="paymentSearch($event)" />
+                  <span class="e-clear-icon" aria-label="close" role="button"
+                      (click)="paymentSearchCleared($event)"></span>
+                  <span id="schedule_searchbutton" class="e-input-group-icon search-icon e-icons" tabindex="-1"
+                      title="Search" aria-label="search"></span>
+              </div>
+          </div>
+      </div>
+      <div class="payment-display">
+          <ejs-grid #gridObj [dataSource]='filteredPayments'>
+              <e-columns>
+                  <e-column field='BillNo' width='50' headerText='Bill No' textAlign='Left'></e-column>
+                  <e-column field='PatientName' width='100' textAlign='Left'>
+                      <ng-template #template let-data>
+                          {{data.PatientName}}
+                      </ng-template>
+                  </e-column>
+                  <e-column field='SupplierName' width='100' textAlign='Left'>
+                    <ng-template #template let-data>
+                        {{data.SupplierName}}
+                    </ng-template>
+                  </e-column>
+                  <e-column field='Date' width='80' textAlign='Left'></e-column>
+                  <e-column field='Price' width='150' textAlign='Left'></e-column>
+                  <e-column field='Tax' headerText='Tax' width='100' textAlign='Left'></e-column>
+                  <e-column field='Total' headerText='Total' width='120' textAlign='Left'></e-column>
+              </e-columns>
+          </ejs-grid>
+      </div>
+  </div>
+</div>

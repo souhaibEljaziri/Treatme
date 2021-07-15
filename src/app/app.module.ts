@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy } from '@angular/common';
@@ -27,6 +28,7 @@ import { DoctorAvailabilityComponent } from './doctor-availability/doctor-availa
 import { DoctorsComponent } from './doctors/doctors.component';
 import { PatientsComponent } from './patients/patients.component';
 import { OxygenComponent } from './oxygen/oxygen.component';
+import { PaymentsComponent } from './payments/payments.component';
 import { RecentActivityComponent } from './recent-activity/recent-activity.component';
 import { PreferenceComponent } from './preference/preference.component';
 import { MainComponent } from './main/main.component';
@@ -46,12 +48,14 @@ import { LoginComponent } from './login/login.component';
     DoctorsComponent,
     PatientsComponent,
     OxygenComponent,
+    PaymentsComponent,
     RecentActivityComponent,
     PreferenceComponent,
     MainComponent,
     LoginComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     ScheduleModule,
