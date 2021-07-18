@@ -2,8 +2,9 @@ import { catchError } from 'rxjs/internal/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { environment } from './../environments/environment';
 
-const endpoint = 'http://127.0.0.1:8000/';
+const endpoint = environment.api_endpoint;
 
 export interface Payment {
   id: string;
