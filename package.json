@@ -30,6 +30,8 @@
     "@angular/platform-browser": "11.2.10",
     "@angular/platform-browser-dynamic": "11.2.10",
     "@angular/router": "11.2.10",
+    "@material/fab": "^11.0.0",
+    "@material/theme": "^11.0.0",
     "@syncfusion/ej2-angular-buttons": "*",
     "@syncfusion/ej2-angular-calendars": "*",
     "@syncfusion/ej2-angular-charts": "*",

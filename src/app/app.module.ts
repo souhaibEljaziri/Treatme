@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { APP_BASE_HREF, HashLocationStrategy, Location, LocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
@@ -31,6 +32,7 @@ import { RecentActivityComponent } from './recent-activity/recent-activity.compo
 import { PreferenceComponent } from './preference/preference.component';
 import { MainComponent } from './main/main.component';
 import { LoginComponent } from './login/login.component';
+import { PaymentsComponent } from './payments/payments.component';
 
 @NgModule({
   declarations: [
@@ -49,10 +51,12 @@ import { LoginComponent } from './login/login.component';
     RecentActivityComponent,
     PreferenceComponent,
     MainComponent,
-    LoginComponent
+    LoginComponent,
+    PaymentsComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     ScheduleModule,
     RecurrenceEditorModule,

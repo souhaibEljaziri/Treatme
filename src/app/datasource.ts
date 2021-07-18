@@ -532,6 +532,39 @@ export const oxygenData: Record<string, any>[] = [
 
 ];
 
+export const paymentsData: Record<string, any>[] = [
+    {
+        BillNo: 1,
+        OxygenID: 12,
+        PatientName: 'Ali',
+        SupplierName: 'souhaib',
+        Date: new Date(2021, 7, 3),
+        Price: '100$',
+        Tax: '10%',
+        Total: '110$',
+    },
+    {
+        BillNo: 2,
+        OxygenID: 5,
+        PatientName: 'Kamel',
+        SupplierName: 'wissem',
+        Date: new Date(2021, 2, 3),
+        Price: '70$',
+        Tax: '10%',
+        Total: '77$',
+    },
+    {
+        BillNo: 3,
+        OxygenID: 7,
+        PatientName: 'Karim',
+        SupplierName: 'ferjani',
+        Date: new Date(2020, 1, 3),
+        Price: '50$',
+        Tax: '10%',
+        Total: '55$',
+    }
+];
+
 export const waitingList: Record<string, any>[] = [
     {
         Id: 1,
