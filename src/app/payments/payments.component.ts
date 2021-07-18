@@ -68,7 +68,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     const searchString: string = (args.target as HTMLInputElement).value;
     if (searchString !== '') {
       new DataManager(this.paymentsData).executeQuery(new Query().
-        search(searchString, ['id', 'oxygen', 'supplier', 'date', 'price', 'tax', 'total'], null, true, true)).then((e: ReturnOption) => {
+        search(searchString, ['id', 'patient', 'supplier', 'oxygen', 'date', 'price', 'tax', 'total'], null, true, true)).then((e: ReturnOption) => {
           if ((e.result as any).length > 0) {
             this.filteredPayments = e.result as Record<string, any>[];
           } else {

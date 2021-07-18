@@ -37,7 +37,11 @@
                     <e-column field='WaterCapacity' headerText='Water Capacity' width='100' textAlign='Left'></e-column>
                     <e-column field='OxygenCapacity' headerText='Oxygen Capacity' width='100' textAlign='Left'></e-column>
                     <e-column field='Status' width='80' textAlign='Left'></e-column>
-                    <e-column field='Price' width='80' textAlign='Left'></e-column>
+                    <e-column field='Price' width='80' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <span>{{data.Price}} DT</span>
+                        </ng-template>
+                    </e-column>
                     <e-column field='Action' width='80' textAlign='Left'>
                         <ng-template #template let-data>
                             <button ejs-button cssClass="e-success e-round add-details" (click)='onRequestOxygen()'>

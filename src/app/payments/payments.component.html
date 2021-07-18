@@ -21,14 +21,26 @@
         <div class="payment-display">
             <ejs-grid #gridObj [dataSource]='filteredPayments'>
                 <e-columns>
-                    <e-column field='id' headerText='Bill No' width='50' textAlign='Left'></e-column>
+                    <e-column field='id' headerText='Bill No' width='80' textAlign='Left'></e-column>
                     <e-column field='patient' headerText='PatientName' width='100' textAlign='Left'></e-column>
                     <e-column field='supplier' headerText='SupplierName' width='100' textAlign='Left'></e-column>
-                    <e-column field='oxygen' headerText='Oxygen ID' width='80' textAlign='Left'></e-column>
-                    <e-column field='date' headerText='Created At' width='80' textAlign='Left'></e-column>
-                    <e-column field='price' headerText='Price' width='150' textAlign='Left'></e-column>
-                    <e-column field='tax' headerText='Tax' width='100' textAlign='Left'></e-column>
-                    <e-column field='total' headerText='Total' width='120' textAlign='Left'></e-column>
+                    <e-column field='oxygen' headerText='Oxygen ID' width='100' textAlign='Left'></e-column>
+                    <e-column field='date' headerText='Created At' width='100' textAlign='Left'></e-column>
+                    <e-column field='price' headerText='Price' width='100' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <span>{{data.price}} DT</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field='tax' headerText='Tax' width='100' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <span>{{data.tax}} %</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field='total' headerText='Total' width='100' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <span>{{data.total}} DT</span>
+                        </ng-template>
+                    </e-column>
                 </e-columns>
             </ejs-grid>
         </div>
