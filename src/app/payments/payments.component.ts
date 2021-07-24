@@ -3,6 +3,7 @@ import { Internationalization } from '@syncfusion/ej2-base';
 import { DataManager, Query, ReturnOption } from '@syncfusion/ej2-data';
 import { Dialog, DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { EditService, PageService, EditSettingsModel, GridComponent } from '@syncfusion/ej2-angular-grids';
+import { AddEditPaymentComponent } from '../add-edit-payment/add-edit-payment.component';
 import { RestService, Payment } from '../rest.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -17,6 +18,7 @@ import {MDCRipple} from '@material/ripple';
 })
 export class PaymentsComponent implements OnInit, OnDestroy {
   @ViewChild('gridObj') gridObj: GridComponent;
+  @ViewChild('addEditPaymentObj') addEditPaymentObj: AddEditPaymentComponent;
   @ViewChild('deleteConfirmationDialogObj')
   public deleteConfirmationDialogObj: DialogComponent;
   public paymentsData: Record<string, any>;
@@ -27,8 +29,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   public gridDialog: Dialog;
   public animationSettings: Record<string, any> = { effect: 'None' };
   
-
-  payments: Payment[] = [];
+  
   private subscription:Subscription;
   constructor(public restService: RestService, private router: Router) {
     this.getPayments();
@@ -47,8 +48,12 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
- }
-  
+  }
+
+  public onAddPayment(): void {
+    this.addEditPaymentObj.onAddPayment();
+  }
+
   getPayments(): void {
     this.subscription = this.restService.getPayments().subscribe((resp: any) => {
       this.paymentsData = this.filteredPayments = resp;
@@ -88,7 +93,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   }
 
   public gridRefresh(): void {
-    this.paymentsData = this.restService.getPayments();
+    this.restService.getPayments();
     this.filteredPayments = this.paymentsData;
     this.gridObj.refresh();
   }

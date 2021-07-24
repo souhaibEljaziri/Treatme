@@ -33,6 +33,7 @@ import { PreferenceComponent } from './preference/preference.component';
 import { MainComponent } from './main/main.component';
 import { LoginComponent } from './login/login.component';
 import { PaymentsComponent } from './payments/payments.component';
+import { AddEditPaymentComponent } from './add-edit-payment/add-edit-payment.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { PaymentsComponent } from './payments/payments.component';
     PreferenceComponent,
     MainComponent,
     LoginComponent,
-    PaymentsComponent
+    PaymentsComponent,
+    AddEditPaymentComponent
   ],
   imports: [
     BrowserModule,

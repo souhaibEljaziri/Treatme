@@ -7,48 +7,23 @@
         padding-bottom: 16px;
       }
 
-      .gender-container,
-      .contact-container {
+      .oxygen-container {
         display: flex;
 
-        .gender {
+        .water-capacity {
           padding-right: 8px;
           flex: 1;
         }
 
-        .mobile {
+        .oxygen-capacity {
           padding-left: 8px;
           flex: 1;
         }
       }
 
-      .contact-container .blood-group,
-      .gender-container .dob {
+      .oxygen-container .name-container .price-container {
         padding-left: 8px;
         flex: 1;
-      }
-
-      .gender-container {
-        .gender {
-          display: flex;
-          flex-direction: column;
-
-          label:not(.e-btn) {
-            font-weight: bold;
-            color: #333;
-            font-size: 12px;
-            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif, "-apple-system", "BlinkMacSystemFont";
-          }
-
-          .e-btn-group {
-            height: 32px;
-            margin-top: 8px;
-
-            label {
-              width: 50%;
-            }
-          }
-        }
       }
     }
   }

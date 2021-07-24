@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   patientsData, oxygenData, paymentsData, doctorsData, specializationData, activityData, hospitalData,
-  bloodGroupData, waterCapacityData, oxygenCapacityData, waitingList, shift1BlockData, shift2BlockData, shift3BlockData
+  bloodGroupData, waterCapacityData, oxygenCapacityData, patientsNamesData, suppliersNamesData, oxygenIdsData, waitingList, shift1BlockData, shift2BlockData, shift3BlockData
 } from './datasource';
 import { EventFieldsMapping } from '@syncfusion/ej2-schedule';
 import { CalendarSettings } from './calendar-settings';
@@ -29,6 +29,9 @@ export class DataService {
   public bloodGroupData: Record<string, any>[] = bloodGroupData;
   public waterCapacityData: Record<string, any>[] = waterCapacityData;
   public oxygenCapacityData: Record<string, any>[] = oxygenCapacityData;
+  public patientsNamesData: Record<string, any>[] = patientsNamesData;
+  public suppliersNamesData: Record<string, any>[] = suppliersNamesData;
+  public oxygenIdsData: Record<string, any>[] = oxygenIdsData;
   public waitingList: Record<string, any>[] = waitingList;
   public shift1BlockEvents: Record<string, any>[] = shift1BlockData;
   public shift2BlockEvents: Record<string, any>[] = shift2BlockData;
@@ -118,6 +121,10 @@ export class DataService {
     return this.activePaymentData;
   }
 
+  public setActivePaymentData(data: Record<string, any>): void {
+    this.activePaymentData = data;
+  }
+
   public setDoctorsData(data: Record<string, any>[]): void {
     this.doctorsData = data;
   }
@@ -148,6 +155,10 @@ export class DataService {
 
   public getOxygenData(): Record<string, any>[] {
     return this.oxygenData;
+  }
+
+  public setPaymentsData(data: Record<string, any>[]): void {
+    this.paymentsData = data;
   }
 
   public getPaymentsData(): Record<string, any>[] {

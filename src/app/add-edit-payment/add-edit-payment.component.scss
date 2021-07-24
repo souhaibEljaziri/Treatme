@@ -1,0 +1,44 @@
+.new-payment-dialog {
+    max-height: 98% !important;
+  
+    .e-dlg-content {
+      #new-payment-form {
+        .field-container {
+          padding-bottom: 16px;
+        }
+        .owner-container {
+          display: flex;
+  
+          .supplier-name {
+            padding-right: 8px;
+            flex: 1;
+          }
+  
+          .oxygen-id {
+            padding-left: 8px;
+            flex: 1;
+          }
+        }
+
+        .price-container {
+          display: flex;
+  
+          .tax {
+            padding-right: 8px;
+            flex: 1;
+          }
+  
+          .price {
+            padding-left: 8px;
+            flex: 1;
+          }
+        }
+  
+        .owner-container .patient-name .price-container {
+          padding-left: 8px;
+          flex: 1;
+        }
+      }
+    }
+  }
+  

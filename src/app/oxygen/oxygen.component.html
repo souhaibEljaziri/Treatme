@@ -39,7 +39,7 @@
                     <e-column field='Status' width='80' textAlign='Left'></e-column>
                     <e-column field='Price' width='80' textAlign='Left'>
                         <ng-template #template let-data>
-                            <span>{{data.Price}} DT</span>
+                            <span>{{data.Price ? data.Price + ' DT' : 'Free'}}</span>
                         </ng-template>
                     </e-column>
                     <e-column field='Action' width='80' textAlign='Left'>

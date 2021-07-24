@@ -66,8 +66,6 @@ export class AddEditOxygenComponent {
           columnName = curElement.querySelector('select').name;
           const instance: DropDownList = (curElement.parentElement as EJ2Instance).ej2_instances[0] as DropDownList;
           obj[columnName] = instance.value;
-        } else if (columnName === 'Price' && curElement.querySelector('input').value === '') {
-          obj[columnName] = 'Free'
         }
          else {
           obj[columnName] = curElement.querySelector('input').value;

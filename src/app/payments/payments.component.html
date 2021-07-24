@@ -22,8 +22,8 @@
             <ejs-grid #gridObj [dataSource]='filteredPayments'>
                 <e-columns>
                     <e-column field='id' headerText='Bill No' width='80' textAlign='Left'></e-column>
-                    <e-column field='patient' headerText='PatientName' width='100' textAlign='Left'></e-column>
-                    <e-column field='supplier' headerText='SupplierName' width='100' textAlign='Left'></e-column>
+                    <e-column field='patient' headerText='Patient Name' width='100' textAlign='Left'></e-column>
+                    <e-column field='supplier' headerText='Supplier Name' width='100' textAlign='Left'></e-column>
                     <e-column field='oxygen' headerText='Oxygen ID' width='100' textAlign='Left'></e-column>
                     <e-column field='date' headerText='Created At' width='100' textAlign='Left'></e-column>
                     <e-column field='price' headerText='Price' width='100' textAlign='Left'>
@@ -46,10 +46,11 @@
         </div>
     </div>
 <div class="mdc-touch-target-wrapper">
-    <button class="mdc-fab mdc-fab--mini mdc-fab--touch">
+    <button class="mdc-fab mdc-fab--mini mdc-fab--touch" (click)='onAddPayment()'>
         <div class="mdc-fab__ripple"></div>
         <span class="material-icons mdc-fab__icon">add</span>
         <div class="mdc-fab__touch"></div>
     </button>
 </div>
 </div>
+<app-add-edit-payment #addEditPaymentObj (refreshEvent)="gridRefresh()"></app-add-edit-payment>

@@ -6,6 +6,23 @@ import { environment } from './../environments/environment';
 
 const endpoint = environment.api_endpoint;
 
+export interface Patient {
+  id: string;
+  patientName: string;
+  gender: string;
+  dateOfBirth: string;
+  bloodGroup: string;
+  mobileNumber: string;
+  email: string;
+}
+
+export interface Supplier {
+  id: string;
+  name: string;
+  contact: string;
+  location: string;
+}
+
 export interface Payment {
   id: string;
   patient: string;
@@ -41,11 +58,38 @@ export class RestService {
     return body || { };
   }
 
+  /**Patients */
+  getPatients(): Observable<any> {
+    return this.http.get<Patient>(endpoint + 'patients/all').pipe(
+      catchError(this.handleError)
+    );
+   }
+  
+  /***Suppliers */
+  getSuppliers(): Observable<any> {
+    return this.http.get<Supplier>(endpoint + 'suppliers/all').pipe(
+      catchError(this.handleError)
+    );
+   }
+  
+  getOxygenBySupplier(id: string): Observable<any> {
+    return this.http.get<Supplier>(endpoint + 'suppliers/'+ id +'/oxygen').pipe(
+      catchError(this.handleError)
+    );
+   }
+
+  /***Payments */
   getPayments(): Observable<any> {
     return this.http.get<Payment>(endpoint + 'payments/all').pipe(
       catchError(this.handleError)
     );
    }
+  
+  addPayment(payment: any): Observable<any> {
+    return this.http.post(endpoint + 'payments/new', payment).pipe(
+      catchError(this.handleError)
+    );
+  }
   
   public updateActiveItem(text: string): void {
     const elements: NodeListOf<Element> = document.querySelectorAll('.active-item');
