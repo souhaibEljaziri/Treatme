@@ -12,12 +12,12 @@
           <div class="field-container owner-container">
             <div class="supplier-name">
               <ejs-dropdownlist id='supplierName' width='125px' cssClass='e-field' placeholder='Supplier Name' index=0
-                floatLabelType='Always' [dataSource]='suppliersNamesData' [fields]='fields' (change)='onChange($event)'>
+                floatLabelType='Always' [dataSource]='suppliersNamesData' [fields]='fields' (change)='onChangeSupplierName($event)'>
               </ejs-dropdownlist>
             </div>
             <div class="oxygen-id">
               <ejs-dropdownlist id='oxygenId' width='125px' cssClass='e-field' placeholder='Oxygen ID' index=0
-                floatLabelType='Always' [dataSource]='oxygenIdsData' [fields]='fields'>
+                floatLabelType='Always' [dataSource]='oxygenIdsData' (change)='onChangeOxygenId($event)' [fields]='fields' >
               </ejs-dropdownlist>
             </div>
           </div>
@@ -27,7 +27,7 @@
               </ejs-textbox>
             </div>
             <div class="price">
-              <ejs-textbox cssClass='e-field' id='price' width='80px' name='price' placeholder='Price' floatLabelType='Always' value='100' disabled>
+              <ejs-textbox cssClass='e-field' id='price' width='80px' name='price' placeholder='Price' floatLabelType='Always' value={{priceData}} disabled>
               </ejs-textbox>
             </div>
           </div>

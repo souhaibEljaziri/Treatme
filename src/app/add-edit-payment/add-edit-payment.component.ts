@@ -5,6 +5,7 @@ import { DialogComponent, BeforeOpenEventArgs } from '@syncfusion/ej2-angular-po
 import { DropDownList } from '@syncfusion/ej2-angular-dropdowns';
 import { EJ2Instance } from '@syncfusion/ej2-angular-schedule';
 import { FormValidator, MaskedTextBoxComponent } from '@syncfusion/ej2-angular-inputs';
+import { PaymentsComponent } from '../payments/payments.component';
 import { DataService } from '../data.service';
 import { RestService } from '../rest.service';
 import { Router } from '@angular/router';
@@ -18,6 +19,7 @@ import { Subscription } from 'rxjs';
 })
 export class AddEditPaymentComponent {
   @Output() refreshEvent = new EventEmitter<string>();
+  @ViewChild('PaymentObj') PaymentObj: PaymentsComponent;
   @ViewChild('newPaymentObj')
   public newPaymentObj: DialogComponent;
   public animationSettings: Record<string, any> = { effect: 'None' };
@@ -26,6 +28,10 @@ export class AddEditPaymentComponent {
   public patientsNamesData: Record<string, any>[];
   public suppliersNamesData: Record<string, any>[];
   public oxygenIdsData: Record<string, any>[];
+  public priceData: string;
+  public defaultPatientName: string;
+  public defaultSupplierName: string;
+  public defaultOxygenId: string;
   public fields: Record<string, any> = { text: 'Text', value: 'Value' };
   public paymentData: Record<string, any>[];
   public activePaymentData: Record<string, any>;
@@ -39,7 +45,8 @@ export class AddEditPaymentComponent {
       resp.forEach((element: { id: any, patientName: any }) => {
         obj.push({Value: element.id, Text: element.patientName})    
       });
-      this.patientsNamesData = obj;  
+      this.patientsNamesData = obj;
+      console.log(this.patientsNamesData)  
     });
   }
 
@@ -50,6 +57,12 @@ export class AddEditPaymentComponent {
         obj.push({Value: element.id, Text: element.supplierName})    
       });
       this.suppliersNamesData = obj;  
+    });
+  }
+
+  getOxygenById(id: string): void {
+    this.subscription = this.restService.getOxygenById(id).subscribe((resp: any) => {    
+      this.priceData = resp.price;  
     });
   }
 
@@ -64,7 +77,7 @@ export class AddEditPaymentComponent {
   }
 
   addPayment(payment: any): void {
-    this.subscription = this.restService.addPayment(payment).subscribe((result) => {
+    this.subscription = this.restService.addPayment(payment).subscribe((result: any) => {
       console.log(result);
     }, (err) => {
       console.log(err);
@@ -72,6 +85,7 @@ export class AddEditPaymentComponent {
   }
 
   public onAddPayment(): void {
+    this.resetFormFields();
     this.dialogState = 'new';
     this.title = 'New Payment';
     this.newPaymentObj.show();
@@ -85,8 +99,15 @@ export class AddEditPaymentComponent {
     this.subscription.unsubscribe();
   }
 
-  public onChange(args: Record<string, any>): void {
+  public onChangeSupplierName(args: Record<string, any>): void {
     this.getOxygenBySupplier(args.value);
+  }
+
+  public onChangeOxygenId(args: Record<string, any>): void {
+    if (args.value !== null)
+      this.getOxygenById(args.value);
+    else
+      this.priceData = "";
   }
 
   public onSaveClick(): void {
@@ -132,8 +153,8 @@ export class AddEditPaymentComponent {
     obj['total'] = (obj['price'] === '0' ?  '0' : obj['price'] + (obj['price'] * obj['tax'] / 100))
     if (this.dialogState === 'new') {
       obj.NewPaymentClass = 'new-payment';
+      this.addPayment(obj);
     }
-    this.addPayment(obj);
     this.refreshEvent.emit();
     this.resetFormFields();
     this.newPaymentObj.hide();
@@ -166,7 +187,9 @@ export class AddEditPaymentComponent {
     this.dialogState = 'edit';
     this.title = 'Edit Payment';
     this.newPaymentObj.show();
-    this.activePaymentData = this.dataService.getActivePaymentData();
+    this.getPatients();
+    this.getSuppliers();
+    this.activePaymentData = this.restService.getActivePaymentData();
     const obj: Record<string, any> = this.activePaymentData;
     const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-payment-dialog .e-field'));
     for (const curElement of formElement) {
@@ -177,8 +200,21 @@ export class AddEditPaymentComponent {
         if (columnName === '' && isCustomElement) {
           columnName = curElement.querySelector('select').name;
           const instance: DropDownList = (curElement.parentElement as EJ2Instance).ej2_instances[0] as DropDownList;
-          instance.value = obj[columnName] as string;
-          instance.dataBind();
+         /* if (columnName === "patientName" && instance.element.id === "patientName") {
+            columnName = "patient";
+            instance.value = obj[columnName] as string;
+            instance.dataBind();
+          }
+          if (columnName === "supplierName" && instance.element.id === "supplierName") {
+            columnName = "supplier";
+            instance.value = obj[columnName] as string;
+            instance.dataBind();
+          }
+          if (columnName === "oxygenId" && instance.element.id === "oxygenId") {
+            columnName = "oxygen";
+            instance.value = obj[columnName] as string;
+            instance.dataBind();
+          }*/
         } else if (columnName === 'Price' && obj[columnName] === 'Free') {
            obj[columnName] = 0;
         } else {

@@ -1036,7 +1036,7 @@ export const colorCategory: Record<string, any>[] = [
 ];
 
 export const bloodGroupData: Record<string, any>[] = [
-    { Value: 'AB+', Text: 'xxxx' },
+    { Value: 'AB+', Text: 'AB+' },
     { Value: 'A+', Text: 'A+' },
     { Value: 'B+', Text: 'B+' },
     { Value: 'O+', Text: 'O+' },

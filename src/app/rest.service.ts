@@ -1,4 +1,4 @@
-import { catchError } from 'rxjs/internal/operators';
+import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
@@ -14,6 +14,14 @@ export interface Patient {
   bloodGroup: string;
   mobileNumber: string;
   email: string;
+}
+
+export interface Oxygen {
+  id: string;
+  waterCapacity: string;
+  oxygeneCapacity: string;
+  status: string;
+  price: string;
 }
 
 export interface Supplier {
@@ -38,6 +46,7 @@ export interface Payment {
   providedIn: 'root'
 })
 export class RestService {
+  public activePaymentData: Record<string, any>;
 
   constructor(private http: HttpClient) { }
 
@@ -61,6 +70,13 @@ export class RestService {
   /**Patients */
   getPatients(): Observable<any> {
     return this.http.get<Patient>(endpoint + 'patients/all').pipe(
+      catchError(this.handleError)
+    );
+   }
+  
+  /**Oxygen */
+  getOxygenById(id: string): Observable<any> {
+    return this.http.get<Oxygen>(endpoint + 'oxygen/' + id).pipe(
       catchError(this.handleError)
     );
    }
@@ -89,6 +105,20 @@ export class RestService {
     return this.http.post(endpoint + 'payments/new', payment).pipe(
       catchError(this.handleError)
     );
+  }
+
+  deletePayment(id: string): Observable<any> {
+    return this.http.delete(endpoint + 'payments/delete/' + id).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  public getActivePaymentData(): Record<string, any> {
+    return this.activePaymentData;
+  }
+
+  public setActivePaymentData(data: Record<string, any>): void {
+    this.activePaymentData = data;
   }
   
   public updateActiveItem(text: string): void {
