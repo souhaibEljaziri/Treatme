@@ -1,0 +1,147 @@
+<div id="supplier-wrapper" class="planner-supplier-wrapper">
+  <header>
+    <div class="module-title">
+      <div class="title">Suppliers LIST</div>
+      <div class="underline"></div>
+    </div>
+    <div class="add-supplier" (click)="onAddSupplier()">
+      <div class="e-icon-add e-icons"></div>
+      <div class="add-supplier-label">Add New</div>
+    </div>
+  </header>
+  <div class="suppliers-detail-wrapper">
+    <div class="supplier-operations">
+      <div id="searchTemplate" class="search-wrapper planner-supplier-search">
+        <div class="e-input-group" role="search">
+          <input
+            id="schedule_searchbar"
+            class="e-input"
+            name="input"
+            type="search"
+            placeholder="Search Supllier"
+            (keyup)="supplierSearch($event)"
+          />
+          <span
+            class="e-clear-icon"
+            aria-label="close"
+            role="button"
+            (click)="supplierSearchCleared($event)"
+          ></span>
+          <span
+            id="schedule_searchbutton"
+            class="e-input-group-icon search-icon e-icons"
+            tabindex="-1"
+            title="Search"
+            aria-label="search"
+          ></span>
+        </div>
+      </div>
+      <button
+        ejs-button
+        cssClass="e-normal add-details"
+        [isPrimary]="true"
+        (click)="onAddSupplier()"
+      >
+        Add New Supplier
+      </button>
+    </div>
+    <div class="Supplier-display">
+      <ejs-grid
+        #gridObj
+        [dataSource]="filteredSuppliers"
+        [editSettings]="editSettings"
+        (actionComplete)="onDataEdit($event)"
+      >
+        <e-columns>
+          <e-column
+            field="Id"
+            width="50"
+            headerText="ID"
+            textAlign="Left"
+          ></e-column>
+          <e-column field="Name" width="100" textAlign="Left">
+            <ng-template #template let-data>
+              <span class="supplier-name" (click)="onSupplierClick($event)">{{
+                data.Name
+              }}</span>
+            </ng-template>
+          </e-column>
+          <e-column
+            field="Mobile"
+            headerText="Mobile Number"
+            width="100"
+            textAlign="Left"
+          ></e-column>
+          <e-column
+            field="Address"
+            headerText="Address"
+            width="120"
+            textAlign="Left"
+          ></e-column>
+        </e-columns>
+        <ng-template #editSettingsTemplate let-data>
+          <div class="grid-edit-dialog">
+            <div class="field-row">
+              <label> Supplier Id </label
+              ><span id="Id">{{ activeSupplierData.Id }}</span>
+            </div>
+            <div class="field-row">
+              <label> Supplier Name </label
+              ><span id="Name">{{ activeSupplierData.Name }}</span>
+            </div>
+            <div class="field-row">
+              <label> Mobile Number </label
+              ><span id="Mobile">{{ activeSupplierData.Mobile }}</span>
+            </div>
+            <div class="field-row">
+              <label> Address </label
+              ><span id="Address">{{ activeSupplierData.Address }}</span>
+            </div>
+            <div class="field-row history-row">
+              <label>Appointment History</label>
+            </div>
+          </div>
+        </ng-template>
+      </ejs-grid>
+    </div>
+  </div>
+</div>
+<app-add-edit-supplier
+  #addEditSupplierObj
+  (refreshEvent)="gridRefresh()"
+></app-add-edit-supplier>
+<div class="delete-confirmation-container" style="display: none">
+  <ejs-dialog
+    #deleteConfirmationDialogObj
+    width="445px"
+    cssClass="break-hour-dialog"
+    [isModal]="true"
+    [visible]="false"
+    [animationSettings]="animationSettings"
+    header="Supplier Details"
+    [showCloseIcon]="true"
+    Supplier
+    target="body"
+  >
+    <ng-template #content>
+      <form>
+        <div>Are you sure you want to delete this supplier?</div>
+      </form>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <div class="button-container">
+        <button
+          ejs-button
+          cssClass="e-normal"
+          [isPrimary]="true"
+          (click)="onDeleteClick()"
+        >
+          Ok
+        </button>
+        <button ejs-button cssClass="e-normal" (click)="onDeleteCancelClick()">
+          Cancel
+        </button>
+      </div>
+    </ng-template>
+  </ejs-dialog>
+</div>

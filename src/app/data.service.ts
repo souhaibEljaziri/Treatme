@@ -1,18 +1,32 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import {
-  patientsData, oxygenData, doctorsData, specializationData, activityData, hospitalData,
-  bloodGroupData, waitingList, shift1BlockData, shift2BlockData, shift3BlockData
-} from './datasource';
-import { EventFieldsMapping } from '@syncfusion/ej2-schedule';
-import { CalendarSettings } from './calendar-settings';
-import { FormValidator, FormValidatorModel } from '@syncfusion/ej2-angular-inputs';
-import { createElement, remove, removeClass } from '@syncfusion/ej2-base';
+  patientsData,
+  oxygenData,
+  doctorsData,
+  specializationData,
+  activityData,
+  hospitalData,
+  bloodGroupData,
+  waitingList,
+  shift1BlockData,
+  shift2BlockData,
+  shift3BlockData,
+  suppliersData,
+} from "./datasource";
+import { EventFieldsMapping } from "@syncfusion/ej2-schedule";
+import { CalendarSettings } from "./calendar-settings";
+import {
+  FormValidator,
+  FormValidatorModel,
+} from "@syncfusion/ej2-angular-inputs";
+import { createElement, remove, removeClass } from "@syncfusion/ej2-base";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class DataService {
   public patientsData: Record<string, any>[];
+  public suppliersData: Record<string, any>[];
   public oxygenData: Record<string, any>[];
   public doctorsData: Record<string, any>[];
   public calendarSettings: CalendarSettings;
@@ -21,6 +35,7 @@ export class DataService {
   public activeDoctorData: Record<string, any>;
   public activePatientData: Record<string, any>;
   public activeOxygenData: Record<string, any>;
+  public activeSupplierData: Record<string, any>;
   public specialistData: Record<string, any>[];
   public activityData: Record<string, any>[];
   public hospitalData: Record<string, any>[];
@@ -32,32 +47,46 @@ export class DataService {
 
   constructor() {
     this.patientsData = patientsData as Record<string, any>[];
+    this.suppliersData = suppliersData as Record<string, any>[];
     this.oxygenData = oxygenData as Record<string, any>[];
     this.doctorsData = doctorsData as Record<string, any>[];
     this.calendarSettings = {
-      bookingColor: 'Doctors',
+      bookingColor: "Doctors",
       calendar: {
-        start: '08:00',
-        end: '21:00'
+        start: "08:00",
+        end: "21:00",
       },
-      currentView: 'Week',
+      currentView: "Week",
       interval: 60,
-      firstDayOfWeek: 0
+      firstDayOfWeek: 0,
     };
     this.selectedDate = new Date(2021, 7, 5);
     this.activeDoctorData = this.doctorsData[0];
     this.activePatientData = this.patientsData[0];
+    this.activeSupplierData = this.suppliersData[0];
     this.activeOxygenData = this.oxygenData[0];
     this.specialistData = specializationData as Record<string, any>[];
     this.activityData = activityData;
     this.hospitalData = hospitalData;
   }
 
-  public onUpdateData(field: string, value: any, className: string, activeData: any): void {
-    if (className.indexOf('doctor') !== -1) {
+  public onUpdateData(
+    field: string,
+    value: any,
+    className: string,
+    activeData: any
+  ): void {
+    if (className.indexOf("doctor") !== -1) {
       for (const doctorData of this.doctorsData) {
         if (doctorData.Id === activeData.Id) {
           doctorData[field] = value;
+        }
+      }
+    }
+    if (className.indexOf("supplier") !== -1) {
+      for (const supplierData of this.suppliersData) {
+        if (supplierData.Id === activeData.Id) {
+          supplierData[field] = value;
         }
       }
     } else {
@@ -88,11 +117,15 @@ export class DataService {
   public setActivePatientData(data: Record<string, any>): void {
     this.activePatientData = data;
   }
-
+  public setActiveSupplierData(data: Record<string, any>): void {
+    this.activePatientData = data;
+  }
   public getActivePatientData(): Record<string, any> {
     return this.activePatientData;
   }
-
+  public getActiveSupplierData(): Record<string, any> {
+    return this.activePatientData;
+  }
   public setActiveOxygenData(data: Record<string, any>): void {
     this.activeOxygenData = data;
   }
@@ -120,11 +153,16 @@ export class DataService {
   public setPatientsData(data: Record<string, any>[]): void {
     this.patientsData = data;
   }
+  public setSuppliersData(data: Record<string, any>[]): void {
+    this.suppliersData = data;
+  }
 
   public getPatientsData(): Record<string, any>[] {
     return this.patientsData;
   }
-
+  public getSuppliersData(): Record<string, any>[] {
+    return this.suppliersData;
+  }
   public setOxygenData(data: Record<string, any>[]): void {
     this.oxygenData = data;
   }
@@ -149,60 +187,85 @@ export class DataService {
     return this.waitingList;
   }
 
-  public renderFormValidator(formElement: HTMLFormElement, rules: Record<string, any>, parentElement: HTMLElement): void {
+  public renderFormValidator(
+    formElement: HTMLFormElement,
+    rules: Record<string, any>,
+    parentElement: HTMLElement
+  ): void {
     const model: FormValidatorModel = {
-      customPlacement: (inputElement: HTMLElement, error: HTMLElement) => { this.errorPlacement(inputElement, error); },
-      rules: rules as { [name: string]: { [rule: string]: Record<string, any> } },
+      customPlacement: (inputElement: HTMLElement, error: HTMLElement) => {
+        this.errorPlacement(inputElement, error);
+      },
+      rules: rules as {
+        [name: string]: { [rule: string]: Record<string, any> };
+      },
       validationComplete: (args: Record<string, any>) => {
         this.validationComplete(args, parentElement);
-      }
+      },
     };
     const obj: FormValidator = new FormValidator(formElement, model);
   }
 
-  public validationComplete(args: Record<string, any>, parentElement: HTMLElement): void {
-    const elem: HTMLElement = parentElement.querySelector('#' + args.inputName + '_Error') as HTMLElement;
+  public validationComplete(
+    args: Record<string, any>,
+    parentElement: HTMLElement
+  ): void {
+    const elem: HTMLElement = parentElement.querySelector(
+      "#" + args.inputName + "_Error"
+    ) as HTMLElement;
     if (elem) {
-      elem.style.display = (args.status === 'failure') ? '' : 'none';
+      elem.style.display = args.status === "failure" ? "" : "none";
     }
   }
 
   public errorPlacement(inputElement: HTMLElement, error: HTMLElement): void {
-    const id: string = error.getAttribute('for');
-    const elem: Element = inputElement.parentElement.querySelector('#' + id + '_Error');
+    const id: string = error.getAttribute("for");
+    const elem: Element = inputElement.parentElement.querySelector(
+      "#" + id + "_Error"
+    );
     if (!elem) {
-      const div: HTMLElement = createElement('div', {
-        className: 'field-error',
-        id: inputElement.getAttribute('name') + '_Error'
+      const div: HTMLElement = createElement("div", {
+        className: "field-error",
+        id: inputElement.getAttribute("name") + "_Error",
       });
-      const content: Element = createElement('div', { className: 'error-content' });
+      const content: Element = createElement("div", {
+        className: "error-content",
+      });
       content.appendChild(error);
       div.appendChild(content);
       inputElement.parentElement.parentElement.appendChild(div);
     }
   }
 
-  public destroyErrorElement(formElement: HTMLFormElement, inputElements: HTMLInputElement[]): void {
+  public destroyErrorElement(
+    formElement: HTMLFormElement,
+    inputElements: HTMLInputElement[]
+  ): void {
     if (formElement) {
-      const elements: Element[] = [].slice.call(formElement.querySelectorAll('.field-error'));
+      const elements: Element[] = [].slice.call(
+        formElement.querySelectorAll(".field-error")
+      );
       for (const elem of elements) {
         remove(elem);
       }
       for (const element of inputElements) {
-        if (element.querySelector('input').classList.contains('e-error')) {
-          removeClass([element.querySelector('input')], 'e-error');
+        if (element.querySelector("input").classList.contains("e-error")) {
+          removeClass([element.querySelector("input")], "e-error");
         }
       }
     }
   }
 
   public updateActiveItem(text: string): void {
-    const elements: NodeListOf<Element> = document.querySelectorAll('.active-item');
-    elements.forEach(element => {
-      if (element.classList.contains('active-item')) {
-        element.classList.remove('active-item');
+    const elements: NodeListOf<Element> =
+      document.querySelectorAll(".active-item");
+    elements.forEach((element) => {
+      if (element.classList.contains("active-item")) {
+        element.classList.remove("active-item");
       }
     });
-    document.querySelector('.sidebar-item.' + text).classList.add('active-item');
+    document
+      .querySelector(".sidebar-item." + text)
+      .classList.add("active-item");
   }
 }

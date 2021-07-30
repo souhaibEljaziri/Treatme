@@ -1,0 +1,67 @@
+<div class="new-supplier-container" style="display: none">
+  <ejs-dialog
+    #newSupplierObj
+    width="390px"
+    cssClass="new-supplier-dialog"
+    [isModal]="true"
+    [visible]="false"
+    [animationSettings]="animationSettings"
+    [header]="title"
+    [showCloseIcon]="true"
+    target="body"
+    (beforeOpen)="onBeforeOpen($event)"
+  >
+    <ng-template #content>
+      <form id="new-supplier-form">
+        <div class="field-container name-container">
+          <ejs-textbox
+            id="Name"
+            name="Name"
+            cssClass="supplier-name e-field"
+            placeholder="Supplier Name"
+            floatLabelType="Always"
+          ></ejs-textbox>
+        </div>
+        <div class="field-container contact-container">
+          <div class="mobile">
+            <ejs-maskedtextbox
+              id="Mobile"
+              name="Mobile"
+              cssClass="e-field"
+              width="180px"
+              placeholder="Mobile Number"
+              mask="(999) 999-9999"
+              floatLabelType="Always"
+            >
+            </ejs-maskedtextbox>
+          </div>
+        </div>
+        <div class="field-container Address-container">
+          <ejs-textbox
+            cssClass="e-field"
+            id="Address"
+            name="Address"
+            placeholder="Address"
+            floatLabelType="Always"
+          >
+          </ejs-textbox>
+        </div>
+      </form>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <div class="button-container">
+        <button ejs-button cssClass="e-normal" (click)="onCancelClick()">
+          Cancel
+        </button>
+        <button
+          ejs-button
+          cssClass="e-normal"
+          [isPrimary]="true"
+          (click)="onSaveClick()"
+        >
+          Save
+        </button>
+      </div>
+    </ng-template>
+  </ejs-dialog>
+</div>
