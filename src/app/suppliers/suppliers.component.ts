@@ -73,13 +73,7 @@ export class SuppliersComponent implements OnInit {
       this.dataService.setActiveSupplierData(this.activeSupplierData);
       this.gridDialog = args.dialog as Dialog;
       this.gridDialog.header = "Supplier Details";
-      const fields: Array<string> = [
-        "Id",
-        "Name",
-        "Gender",
-        "Mobile",
-        "Address"
-      ];
+      const fields: Array<string> = ["Id", "Name", "Contact", "Location"];
       fields.forEach((field) => {
         let value: string;
         if (
@@ -96,8 +90,7 @@ export class SuppliersComponent implements OnInit {
             ? ""
             : this.activeSupplierData[field].toString();
         }
-        (args.dialog as Dialog).element.querySelector("#" + field).innerHTML =
-          value;
+      
       });
       //this.gridDialog.element.querySelector('.history-row').appendChild(this.getHistoryDetails());
       const editButtonElement: HTMLElement = createElement("button", {

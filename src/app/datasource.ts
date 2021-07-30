@@ -509,21 +509,21 @@ export const suppliersData: Record<string, any>[] = [
     Name: "supplier 1",
     Text: "houas",
     Mobile: "(71) 012-523",
-    Address: "gafsa - gafsa -passage",
+    Location: "gafsa - gafsa -passage",
   },
   {
     Id: 2,
     Name: "supplier 2",
     Text: "amor",
     Mobile: "(71) 259-479",
-    Address: "sfax - sfax - sfax",
+    Location: "sfax - sfax - sfax",
   },
   {
     Id: 3,
     Name: "supplier 3",
     Text: "helmi",
     Mobile: "(71) 855-999",
-    Address: "bizert - bizerte - bizerte",
+    Location: "bizert - bizerte - bizerte",
   },
 ];
 export const oxygenData: Record<string, any>[] = [

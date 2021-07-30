@@ -244,8 +244,8 @@ export class AddEditSupplierComponent {
     const rules: Record<string, any> = {};
     rules.Name = { required: [true, "Enter valid name"] };
     rules.Mobile = { required: [customFn, "Enter valid mobile number"] };
-    rules.Address = {
-      required: [true, "Enter valid Address"],
+    rules.Location = {
+      required: [true, "Enter valid Location"],
     };
     this.dataService.renderFormValidator(
       formElement,
