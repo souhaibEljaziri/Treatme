@@ -1,1 +1,36 @@
-
+<div class="new-oxygen-container" style="display:none">
+  <ejs-dialog #newOxygenObj width='390px' cssClass='new-oxygen-dialog' [isModal]='true' [visible]='false'
+    [animationSettings]='animationSettings' [header]='title' [showCloseIcon]='true' target='body'
+    (beforeOpen)='onBeforeOpen($event)'>
+    <ng-template #content>
+      <form id='new-oxygen-form'>
+        <div class="field-container name-container">
+          <ejs-textbox id='Name' name='Name' cssClass='oxygen-name e-field' placeholder='Supplier Name'
+            floatLabelType='Always'></ejs-textbox>
+        </div>
+        <div class="field-container oxygen-container">
+          <div class="water-capacity">
+            <ejs-dropdownlist id='WaterCapacity' width='125px' cssClass='e-field' placeholder='Water Capacity' index=0
+              floatLabelType='Always' [dataSource]='waterCapacityData' [fields]='fields'>
+            </ejs-dropdownlist>
+          </div>
+          <div class="oxygen-capacity">
+            <ejs-dropdownlist id='OxygenCapacity' width='125px' cssClass='e-field' placeholder='Oxygen Capacity' index=0
+              floatLabelType='Always' [dataSource]='oxygenCapacityData' [fields]='fields'>
+            </ejs-dropdownlist>
+          </div>
+        </div>
+        <div class="field-container price-container">
+          <ejs-textbox cssClass='e-field' id='Price' width='80px' name='Price' placeholder='Price' floatLabelType='Always'>
+          </ejs-textbox>
+        </div>
+      </form>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <div class="button-container">
+        <button ejs-button cssClass="e-normal" (click)='onCancelClick()'>Cancel</button>
+        <button ejs-button cssClass="e-normal" [isPrimary]="true" (click)='onSaveClick()'>Save</button>
+      </div>
+    </ng-template>
+  </ejs-dialog>
+</div>
