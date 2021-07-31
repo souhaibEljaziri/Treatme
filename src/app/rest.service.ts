@@ -18,10 +18,12 @@ export interface Patient {
 
 export interface Oxygen {
   id: string;
+  supplier: string;
   waterCapacity: string;
   oxygeneCapacity: string;
   status: string;
   price: string;
+  image: string;
 }
 
 export interface Supplier {
@@ -47,6 +49,7 @@ export interface Payment {
 })
 export class RestService {
   public activePaymentData: Record<string, any>;
+  public activeOxygenData: Record<string, any>;
 
   constructor(private http: HttpClient) { }
 
@@ -75,11 +78,44 @@ export class RestService {
    }
   
   /**Oxygen */
+  getOxygen(): Observable<any> {
+    return this.http.get<Oxygen>(endpoint + 'oxygen/all').pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getOxygenById(id: string): Observable<any> {
     return this.http.get<Oxygen>(endpoint + 'oxygen/' + id).pipe(
       catchError(this.handleError)
     );
-   }
+  }
+
+  addOxygen(oxygen: any): Observable<any> {
+    return this.http.post(endpoint + 'oxygen/new', oxygen).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  updateOxygen(id: string, oxygen: Oxygen): Observable<any> {
+    return this.http.put<Oxygen>(endpoint + 'oxygen/update/' + id, oxygen).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  deleteOxygen(id: string): Observable<any> {
+    return this.http.delete(endpoint + 'oxygen/delete/' + id).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  public uploadImage(image: File, id: string): Observable<any> {
+    const formData = new FormData();
+
+    formData.append('image', image);
+    formData.append('id', id);
+
+    return this.http.post(endpoint + 'oxygen/upload', formData);
+  }
   
   /***Suppliers */
   getSuppliers(): Observable<any> {
@@ -94,15 +130,35 @@ export class RestService {
     );
    }
 
+   public getActiveOxygenData(): Record<string, any> {
+    return this.activeOxygenData;
+  }
+
+  public setActiveOxygenData(data: Record<string, any>): void {
+    this.activeOxygenData = data;
+  }
+
   /***Payments */
   getPayments(): Observable<any> {
     return this.http.get<Payment>(endpoint + 'payments/all').pipe(
       catchError(this.handleError)
     );
    }
+
+   getPaymentById(id: string): Observable<any> {
+    return this.http.get<Payment>(endpoint + 'payment/' + id).pipe(
+      catchError(this.handleError)
+    );
+   }
   
   addPayment(payment: any): Observable<any> {
     return this.http.post(endpoint + 'payments/new', payment).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  updatePayment(id: string, payment: Payment): Observable<any> {
+    return this.http.put<Payment>(endpoint + 'payment/update/' + id, payment).pipe(
       catchError(this.handleError)
     );
   }

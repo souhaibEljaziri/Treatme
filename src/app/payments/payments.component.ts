@@ -53,9 +53,9 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   public onDataEdit(args: DialogEditEventArgs): void {
     if (args.requestType === 'beginEdit') {
-      this.activePaymentData = args.rowData as Record<string, any>;
-      console.log(this.activePaymentData);
-      this.restService.setActivePaymentData(this.activePaymentData);
+      let data = args.rowData as Record<string, any>;
+      this.activePaymentData = data;
+      this.getPaymentById(data.id);
       this.gridDialog = args.dialog as Dialog;
       this.gridDialog.header = 'Payment Details';
       const fields: Array<string> = ['id', 'patient', 'supplier', 'oxygen', 'date', 'price', 'tax', 'total'];
@@ -118,6 +118,12 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     });
   }
 
+  getPaymentById(id: string): void {
+    this.subscription = this.restService.getPaymentById(id).subscribe((resp: any) => {
+      this.restService.setActivePaymentData(resp);
+    });
+  }
+
   deletePayment(id: string): void {
     this.restService.deletePayment(id)
       .subscribe(() => {
@@ -126,14 +132,6 @@ export class PaymentsComponent implements OnInit, OnDestroy {
         }, (err) => {
           console.log(err);
         });
-  }
-
-  public onPaymentClick(args: MouseEvent): void {
-    const rowIndex: string = (args.currentTarget as HTMLElement).parentElement.getAttribute('index');
-    setTimeout(() => {
-      this.gridObj.selectRow(parseInt(rowIndex, 10));
-      this.gridObj.startEdit();
-    });
   }
 
   public paymentSearch(args: KeyboardEvent): void {
