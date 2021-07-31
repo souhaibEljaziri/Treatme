@@ -9,6 +9,7 @@ import { DataService } from '../data.service';
 import { PatientService } from '../services/patient.service';
 import { DoctorsService } from '../doctors/doctors.service';
 import { ApointmentService } from '../services/appointment.service';
+// import { setTimeout } from 'node:timers';
 
 @Component({
   selector: 'app-dashboard',
@@ -118,7 +119,10 @@ export class DashboardComponent implements OnInit {
     let doctor: any;
     let patient: any;
     let gridData:any[] = [];
-    app['hydra:member'].forEach(async (element: any) => {
+    app['hydra:member'].forEach( (element: any) => {
+      setTimeout(async() => {
+        
+
       doctor = await this.doctorService.find(element.doctor.split('/')[3]).toPromise();
       patient = await this.patientService.find(element.patient.split('/')[3]).toPromise();
       gridData.push({
@@ -128,6 +132,7 @@ export class DashboardComponent implements OnInit {
         Symptoms: patient.symptoms,
         DoctorId: element.doctor.split('/')[3]
       })
+    }, 400);
     });
     this.gridData = gridData;
     

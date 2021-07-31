@@ -40,17 +40,20 @@ export class SuppliersComponent implements OnInit {
   public animationSettings: Record<string, any> = { effect: "None" };
 
   constructor(public dataService: DataService) {
-    this.suppliersData = this.filteredSuppliers =
-      this.dataService.getSuppliersData();
-    this.hospitalData = this.dataService.getHospitalData();
-    this.doctorsData = this.dataService.getDoctorsData();
-    this.activeSupplierData = this.filteredSuppliers[0];
-    this.editSettings = {
-      allowEditing: true,
-      allowAdding: true,
-      allowDeleting: true,
-      mode: "Dialog",
-    };
+this.fn()
+  }
+ async fn() {
+    this.suppliersData = this.filteredSuppliers = await
+    this.dataService.getSuppliersData();
+  this.hospitalData = this.dataService.getHospitalData();
+  this.doctorsData =await this.dataService.getDoctorsData();
+  this.activeSupplierData = this.filteredSuppliers[0];
+  this.editSettings = {
+    allowEditing: true,
+    allowAdding: true,
+    allowDeleting: true,
+    mode: "Dialog",
+  };
   }
 
   public ngOnInit(): void {
@@ -220,8 +223,8 @@ export class SuppliersComponent implements OnInit {
     }
   }
 
-  public gridRefresh(): void {
-    this.suppliersData = this.dataService.getSuppliersData();
+  public async gridRefresh() {
+    this.suppliersData = await this.dataService.getSuppliersData();
     this.filteredSuppliers = this.suppliersData;
     this.gridObj.refresh();
   }

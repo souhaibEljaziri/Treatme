@@ -25,14 +25,18 @@
         <span class="patients-image"><span class="icon-patients item-image"></span></span>
         <span class="text" title="patients">Patients</span>
       </div>
+      <div class="sidebar-item patients" routerLink="/supplier" (click)="onItemClick($event)">
+        <span class="patients-image"><span class="icon-about item-image"></span></span>
+        <span class="text" title="patients">supplier</span>
+      </div>
       <div class="sidebar-item oxygen" routerLink="/oxygen" (click)="onItemClick($event)">
         <span class="oxygen-image"><span class="glyph-oxygen item-image"></span></span>
         <span class="text" title="oxygen">Oxygen</span>
       </div>
-      <div class="sidebar-item preference" routerLink="/preference" (click)="onItemClick($event)">
+      <!-- <div class="sidebar-item preference" routerLink="/preference" (click)="onItemClick($event)">
         <span class="preference-image"><span class="icon-preference item-image"></span></span>
         <span class="text" title="preference">Preference</span>
-      </div>
+      </div> -->
       <!-- <div class="sidebar-item about" routerLink="/about" (click)="onItemClick($event)">
         <span class="about-image"><span class="icon-about item-image"></span></span>
         <span class="text" title="about">About</span>

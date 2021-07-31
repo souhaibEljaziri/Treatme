@@ -19,6 +19,7 @@ import {
   MaskedTextBoxComponent,
 } from "@syncfusion/ej2-angular-inputs";
 import { DataService } from "../data.service";
+import { OxygenSupplierService } from "../services/oxygensupplier.service";
 
 @Component({
   selector: "app-add-edit-supplier",
@@ -42,12 +43,12 @@ export class AddEditSupplierComponent {
   public hospitalData: Record<string, any>[];
   public doctorsData: Record<string, any>[];
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService,private oxygenSupplierService:OxygenSupplierService) {
    this.fn();
   }
   async fn(){
     this.bloodGroupData = this.dataService.bloodGroupData;
-    this.suppliersData = this.dataService.getSuppliersData();
+    this.suppliersData =await this.dataService.getSuppliersData();
     this.hospitalData = this.dataService.getHospitalData();
     this.doctorsData =await this.dataService.getDoctorsData();
     this.activeSupplierData = this.dataService.getActiveSupplierData();
@@ -64,7 +65,7 @@ export class AddEditSupplierComponent {
     this.newSupplierObj.hide();
   }
 
-  public onSaveClick(): void {
+  public async onSaveClick() {
     const formElementContainer: HTMLElement = document.querySelector(
       ".new-supplier-dialog #new-supplier-form"
     );
@@ -77,7 +78,7 @@ export class AddEditSupplierComponent {
     ) {
       return;
     }
-    const obj: Record<string, any> =
+    let obj: Record<string, any> =
       this.dialogState === "new" ? {} : this.activeSupplierData;
     const formElement: HTMLInputElement[] = [].slice.call(
       document.querySelectorAll(".new-supplier-dialog .e-field")
@@ -109,15 +110,21 @@ export class AddEditSupplierComponent {
         }
       }
     }
-    this.suppliersData = this.dataService.getSuppliersData();
+    this.suppliersData =await this.dataService.getSuppliersData();
     if (this.dialogState === "new") {
+      if(!this.suppliersData)
+      this.suppliersData = []
       obj.Id =
         Math.max.apply(
           Math,
           this.suppliersData.map((data: Record<string, any>) => data.Id)
         ) + 1;
+        if(!obj.Id)
+        obj.Id=0
       obj.NewSupplierClass = "new-supplier";
       this.suppliersData.push(obj);
+      obj = this.convertToSave(obj,'ADD')
+      await this.oxygenSupplierService.save(obj).toPromise();
     } else {
       this.activeSupplierData = obj;
       this.suppliersData.forEach((supplierData: Record<string, any>) => {
@@ -126,7 +133,10 @@ export class AddEditSupplierComponent {
         }
       });
       this.dataService.setActiveSupplierData(this.activeSupplierData);
+      obj = this.convertToSave(obj,'EDIT')
+      await this.oxygenSupplierService.update(obj).toPromise();
     }
+
     const activityObj: Record<string, any> = {
       Name:
         this.dialogState === "new" ? "Added New Supplier" : "Updated Supplier",
@@ -140,6 +150,19 @@ export class AddEditSupplierComponent {
     this.refreshEvent.emit();
     this.resetFormFields();
     this.newSupplierObj.hide();
+  }
+ convertToSave(obj: any, arg1: string): any {
+    let data:any={};
+    data = ({
+      name: obj.Name,
+      contact: obj.Mobile,
+      location: obj.Location,
+    })
+    if (arg1 == 'EDIT') {
+      data['id'] = obj.Id;
+    }
+    
+    return data;
   }
 
   public resetFormFields(): void {

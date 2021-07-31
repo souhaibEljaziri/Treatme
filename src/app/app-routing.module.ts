@@ -10,6 +10,7 @@ import { PreferenceComponent } from './preference/preference.component';
 import { AboutComponent } from './about/about.component';
 import { DoctorDetailsComponent } from './doctor-details/doctor-details.component';
 import { LoginComponent } from './login/login.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -22,7 +23,8 @@ const routes: Routes = [
   { path: 'oxygen', component: OxygenComponent },
   { path: 'payments', component: PaymentsComponent },
   { path: 'preference', component: PreferenceComponent },
-  { path: 'about', component: AboutComponent }
+  { path: 'about', component: AboutComponent },
+  { path: 'supplier', component: SuppliersComponent }
 ];
 
 @NgModule({

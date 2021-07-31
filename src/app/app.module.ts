@@ -41,6 +41,8 @@ import { OxygenSupplierService } from './services/oxygensupplier.service';
 import { OxygenService } from './services/oxygen.service';
 import { RestService } from './services/rest.service';
 import { DoctorsService } from './doctors/doctors.service';
+import { SuppliersComponent } from './suppliers/suppliers.component';
+import { AddEditSupplierComponent } from './add-edit-supplier/add-edit-supplier.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,9 @@ import { DoctorsService } from './doctors/doctors.service';
     MainComponent,
     LoginComponent,
     PaymentsComponent,
-    AddEditPaymentComponent
+    AddEditPaymentComponent,
+    SuppliersComponent,
+    AddEditSupplierComponent
   ],
   imports: [
     BrowserModule,
@@ -91,7 +95,8 @@ import { DoctorsService } from './doctors/doctors.service';
     ReactiveFormsModule,
     ToastModule
   ],
-  providers: [{ provide: APP_BASE_HREF, useValue: '/' }, Location, { provide: LocationStrategy, useClass: HashLocationStrategy },OxygenService,OxygenSupplierService,PatientService,SpecializationDataService,WorkDaysService,RestService,DoctorsService],
+  providers: [{ provide: APP_BASE_HREF, useValue: '/' }, Location, { provide: LocationStrategy, useClass: HashLocationStrategy },OxygenService,OxygenSupplierService,PatientService,SpecializationDataService,OxygenSupplierService,WorkDaysService,RestService,DoctorsService],
+
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

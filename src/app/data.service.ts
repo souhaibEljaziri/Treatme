@@ -10,6 +10,7 @@ import { createElement, remove, removeClass } from '@syncfusion/ej2-base';
 import { DoctorsService } from './doctors/doctors.service';
 import { PatientService } from './services/patient.service';
 import { OxygenService } from "./services/oxygen.service";
+import { OxygenSupplierService } from "./services/oxygensupplier.service";
 
 @Injectable({
   providedIn: "root",
@@ -41,7 +42,7 @@ export class DataService {
   public shift2BlockEvents: Record<string, any>[] = shift2BlockData;
   public shift3BlockEvents: Record<string, any>[] = shift3BlockData;
 
-  constructor(private doctorsService: DoctorsService,private patientService:PatientService,private oxygenService:OxygenService) {
+  constructor(private doctorsService: DoctorsService, private patientService: PatientService, private oxygenService: OxygenService, private oxygenSupplierService: OxygenSupplierService) {
     this.patientsData = patientsData as Record<string, any>[];
     // this.suppliersData = suppliersData as Record<string, any>[];
     this.oxygenData = oxygenData as Record<string, any>[];
@@ -95,25 +96,27 @@ export class DataService {
       }
     }
   }
- convertDataAfterGetPatient(data :  any[]) : any[]{
-   let outData : any[] = []
-data.forEach((element : any) => {
-  outData.push({  Id: element.id,
-    Name: element.patientname,
-    Text: element.text,
-    DOB: new Date(element.dateofbirth),
-    Mobile: element.mobilephone,
-    Email: element.email,
-    Address: element.address,
-    Disease: element.disease,
-    DepartmentName: element.patientname,
-    BloodGroup: element.bloodgroup,
-    Gender: element.gender,
-    Symptoms: element.blood_group})
-});
+  convertDataAfterGetPatient(data: any[]): any[] {
+    let outData: any[] = []
+    data.forEach((element: any) => {
+      outData.push({
+        Id: element.id,
+        Name: element.patientname,
+        Text: element.text,
+        DOB: new Date(element.dateofbirth),
+        Mobile: element.mobilephone,
+        Email: element.email,
+        Address: element.address,
+        Disease: element.disease,
+        DepartmentName: element.patientname,
+        BloodGroup: element.bloodgroup,
+        Gender: element.gender,
+        Symptoms: element.blood_group
+      })
+    });
 
-return outData;
- }
+    return outData;
+  }
   public getCalendarSettings(): CalendarSettings {
     return this.calendarSettings;
   }
@@ -211,7 +214,7 @@ return outData;
 
     });
     console.log(outData);
-    
+
     return outData;
   }
   public addHospitalData(data: Record<string, any>[]): void {
@@ -234,7 +237,23 @@ return outData;
     this.patientsData = this.convertDataAfterGetPatient(data['hydra:member']);
     return this.patientsData;
   }
-  public getSuppliersData(): Record<string, any>[] {
+  convertDataAfterGetSuppliersData(data: any[]): any[] {
+    let outData: any[] = []
+    data.forEach((element: any) => {
+      outData.push({
+        Id: element.id,
+        Name: element.name,
+        Mobile: element.contact,
+
+        Location: element.location,
+      })
+    });
+
+    return outData;
+  }
+  public async getSuppliersData() {
+    let data: any = await this.oxygenSupplierService.findAll().toPromise()
+    this.suppliersData = this.convertDataAfterGetSuppliersData(data['hydra:member']);
     return this.suppliersData;
   }
   public setOxygenData(data: Record<string, any>[]): void {
