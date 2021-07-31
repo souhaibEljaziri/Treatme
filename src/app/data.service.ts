@@ -8,7 +8,8 @@ import { CalendarSettings } from './calendar-settings';
 import { FormValidator, FormValidatorModel } from '@syncfusion/ej2-angular-inputs';
 import { createElement, remove, removeClass } from '@syncfusion/ej2-base';
 import { DoctorsService } from './doctors/doctors.service';
-import { PatientService } from './patient.service';
+import { PatientService } from './services/patient.service';
+import { OxygenService } from "./services/oxygen.service";
 
 @Injectable({
   providedIn: "root",
@@ -40,7 +41,7 @@ export class DataService {
   public shift2BlockEvents: Record<string, any>[] = shift2BlockData;
   public shift3BlockEvents: Record<string, any>[] = shift3BlockData;
 
-  constructor(private doctorsService: DoctorsService,private patientService:PatientService) {
+  constructor(private doctorsService: DoctorsService,private patientService:PatientService,private oxygenService:OxygenService) {
     this.patientsData = patientsData as Record<string, any>[];
     // this.suppliersData = suppliersData as Record<string, any>[];
     this.oxygenData = oxygenData as Record<string, any>[];

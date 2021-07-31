@@ -6,9 +6,9 @@ import { DropDownList } from '@syncfusion/ej2-angular-dropdowns';
 import { EJ2Instance } from '@syncfusion/ej2-angular-schedule';
 import { FormValidator, MaskedTextBoxComponent } from '@syncfusion/ej2-angular-inputs';
 import { DataService } from '../data.service';
-import { RestService } from '../rest.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { RestService } from '../services/rest.service';
 
 @Component({
   selector: 'app-add-edit-payment',
@@ -64,9 +64,9 @@ export class AddEditPaymentComponent {
   }
 
   addPayment(payment: any): void {
-    this.subscription = this.restService.addPayment(payment).subscribe((result) => {
+    this.subscription = this.restService.addPayment(payment).subscribe((result:any) => {
       console.log(result);
-    }, (err) => {
+    }, (err:any) => {
       console.log(err);
     });
   }

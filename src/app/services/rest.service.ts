@@ -2,7 +2,7 @@ import { catchError } from 'rxjs/internal/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { environment } from './../environments/environment';
+import { environment } from 'src/environments/environment';
 
 const endpoint = environment.api_endpoint;
 

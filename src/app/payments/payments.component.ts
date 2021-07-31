@@ -4,7 +4,7 @@ import { DataManager, Query, ReturnOption } from '@syncfusion/ej2-data';
 import { Dialog, DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { EditService, PageService, EditSettingsModel, GridComponent } from '@syncfusion/ej2-angular-grids';
 import { AddEditPaymentComponent } from '../add-edit-payment/add-edit-payment.component';
-import { RestService, Payment } from '../rest.service';
+import { RestService } from '../services/rest.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import {MDCRipple} from '@material/ripple';
