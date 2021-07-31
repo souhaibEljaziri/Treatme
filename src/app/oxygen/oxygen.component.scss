@@ -58,6 +58,12 @@
     .oxygen-display {
       margin-top: 17px;
 
+      table.e-table {
+        th {
+          background-color: $planner-table-th-bg-color;
+          color: $planner-table-th-color;
+        }
+      }
       .e-grid {
         .e-gridcontent {
           tr.e-row {

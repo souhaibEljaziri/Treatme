@@ -1,25 +1,13 @@
 import { Injectable } from "@angular/core";
 import {
-  patientsData,
-  oxygenData,
-  doctorsData,
-  specializationData,
-  activityData,
-  hospitalData,
-  bloodGroupData,
-  waitingList,
-  shift1BlockData,
-  shift2BlockData,
-  shift3BlockData,
-  suppliersData,
-} from "./datasource";
-import { EventFieldsMapping } from "@syncfusion/ej2-schedule";
-import { CalendarSettings } from "./calendar-settings";
-import {
-  FormValidator,
-  FormValidatorModel,
-} from "@syncfusion/ej2-angular-inputs";
-import { createElement, remove, removeClass } from "@syncfusion/ej2-base";
+  patientsData, oxygenData, paymentsData, doctorsData, specializationData, activityData, hospitalData,uppliersData,
+  bloodGroupData, waterCapacityData, oxygenCapacityData, patientsNamesData, suppliersNamesData, oxygenIdsData, waitingList, shift1BlockData, shift2BlockData, shift3BlockData
+} from './datasource';
+import { EventFieldsMapping } from '@syncfusion/ej2-schedule';
+import { CalendarSettings } from './calendar-settings';
+import { FormValidator, FormValidatorModel } from '@syncfusion/ej2-angular-inputs';
+import { createElement, remove, removeClass } from '@syncfusion/ej2-base';
+i
 
 @Injectable({
   providedIn: "root",
@@ -28,6 +16,7 @@ export class DataService {
   public patientsData: Record<string, any>[];
   public suppliersData: Record<string, any>[];
   public oxygenData: Record<string, any>[];
+  public paymentsData: Record<string, any>[];
   public doctorsData: Record<string, any>[];
   public calendarSettings: CalendarSettings;
   public selectedDate: Date;
@@ -36,10 +25,16 @@ export class DataService {
   public activePatientData: Record<string, any>;
   public activeOxygenData: Record<string, any>;
   public activeSupplierData: Record<string, any>;
+  public activePaymentData: Record<string, any>;
   public specialistData: Record<string, any>[];
   public activityData: Record<string, any>[];
   public hospitalData: Record<string, any>[];
   public bloodGroupData: Record<string, any>[] = bloodGroupData;
+  public waterCapacityData: Record<string, any>[] = waterCapacityData;
+  public oxygenCapacityData: Record<string, any>[] = oxygenCapacityData;
+  public patientsNamesData: Record<string, any>[] = patientsNamesData;
+  public suppliersNamesData: Record<string, any>[] = suppliersNamesData;
+  public oxygenIdsData: Record<string, any>[] = oxygenIdsData;
   public waitingList: Record<string, any>[] = waitingList;
   public shift1BlockEvents: Record<string, any>[] = shift1BlockData;
   public shift2BlockEvents: Record<string, any>[] = shift2BlockData;
@@ -49,6 +44,7 @@ export class DataService {
     this.patientsData = patientsData as Record<string, any>[];
     this.suppliersData = suppliersData as Record<string, any>[];
     this.oxygenData = oxygenData as Record<string, any>[];
+    this.paymentsData = paymentsData as Record<string, any>[];
     this.doctorsData = doctorsData as Record<string, any>[];
     this.calendarSettings = {
       bookingColor: "Doctors",
@@ -65,6 +61,7 @@ export class DataService {
     this.activePatientData = this.patientsData[0];
     this.activeSupplierData = this.suppliersData[0];
     this.activeOxygenData = this.oxygenData[0];
+    this.activePaymentData = this.paymentsData[0];
     this.specialistData = specializationData as Record<string, any>[];
     this.activityData = activityData;
     this.hospitalData = hospitalData;
@@ -83,12 +80,18 @@ export class DataService {
         }
       }
     }
-    if (className.indexOf("supplier") !== -1) {
+    else if (className.indexOf("supplier") !== -1) {
       for (const supplierData of this.suppliersData) {
         if (supplierData.Id === activeData.Id) {
           supplierData[field] = value;
         }
-      }
+      } else if (className.indexOf('oxygen') !== -1) {
+        for (const oxygenData of this.oxygenData) {
+          if (oxygenData.Id === activeData.Id) {
+            oxygenData[field] = value;
+          }
+        }
+     
     } else {
       for (const patientData of this.patientsData) {
         if (patientData.Id === activeData.Id) {
@@ -134,6 +137,14 @@ export class DataService {
     return this.activeOxygenData;
   }
 
+  public getActivePaymentData(): Record<string, any> {
+    return this.activePaymentData;
+  }
+
+  public setActivePaymentData(data: Record<string, any>): void {
+    this.activePaymentData = data;
+  }
+
   public setDoctorsData(data: Record<string, any>[]): void {
     this.doctorsData = data;
   }
@@ -163,12 +174,32 @@ export class DataService {
   public getSuppliersData(): Record<string, any>[] {
     return this.suppliersData;
   }
+      
+  public getPatientsNamesData(): Record<string, any>[] {
+    return this.patientsNamesData;
+  }
+
+  public getSuppliersNamesData(): Record<string, any>[] {
+    return this.suppliersNamesData;
+  }
+
+  public getOxygenIdsData(): Record<string, any>[] {
+    return this.oxygenIdsData;
+  }
   public setOxygenData(data: Record<string, any>[]): void {
     this.oxygenData = data;
   }
 
   public getOxygenData(): Record<string, any>[] {
     return this.oxygenData;
+  }
+
+  public setPaymentsData(data: Record<string, any>[]): void {
+    this.paymentsData = data;
+  }
+
+  public getPaymentsData(): Record<string, any>[] {
+    return this.paymentsData;
   }
 
   public addActivityData(data: Record<string, any>): void {

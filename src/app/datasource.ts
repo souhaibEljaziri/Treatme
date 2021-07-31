@@ -526,31 +526,37 @@ export const suppliersData: Record<string, any>[] = [
     Location: "bizert - bizerte - bizerte",
   },
 ];
-export const oxygenData: Record<string, any>[] = [
-  {
-    Id: 1,
-    Name: "Kamel",
-    WaterCapacity: "10 Litres",
-    OxygenCapacity: "1500 Litres",
-    Status: "Available",
-    Price: "50$",
-  },
-  {
-    Id: 2,
-    Name: "Farid",
-    WaterCapacity: "5 Litres",
-    OxygenCapacity: "1000 Litres",
-    Status: "Sold",
-    Price: "75$",
-  },
-  {
-    Id: 3,
-    Name: "Samir",
-    WaterCapacity: "15 Litres",
-    OxygenCapacity: "2000 Litres",
-    Status: "Available",
-    Price: "100$",
-  },
+export const paymentsData: Record<string, any>[] = [
+    {
+        id: 1,
+        oxygen: 2,
+        patient: 1,
+        supplier: 1,
+        date: new Date(2021, 7, 3),
+        price: '100',
+        tax: '10',
+        total: '110',
+    },
+    {
+        id: 2,
+        oxygen: 4,
+        patient: 2,
+        supplier: 2,
+        date: new Date(2021, 2, 3),
+        price: '70',
+        tax: '10',
+        total: '77',
+    },
+    {
+        id: 3,
+        oxygen: 3,
+        patient: 3,
+        supplier: 3,
+        date: new Date(2020, 1, 3),
+        price: '50',
+        tax: '10',
+        total: '55',
+    }
 ];
 
 export const waitingList: Record<string, any>[] = [
@@ -1073,6 +1079,42 @@ export const bloodGroupData: Record<string, any>[] = [
   { Value: "A-", Text: "A-" },
   { Value: "B-", Text: "B-" },
   { Value: "O-", Text: "O-" },
+];
+
+export const waterCapacityData: Record<string, any>[] = [
+    { Value: '5', Text: '5' },
+    { Value: '10', Text: '10' },
+    { Value: '15', Text: '15' },
+    { Value: '20', Text: '20' },
+    { Value: '25', Text: '25' },
+];
+
+export const oxygenCapacityData: Record<string, any>[] = [
+    { Value: '500', Text: '500' },
+    { Value: '1000', Text: '1000' },
+    { Value: '1500', Text: '1500' },
+    { Value: '2000', Text: '2000' },
+];
+
+export const patientsNamesData: Record<string, any>[] = [
+    { Value: 1, Text: 'Ali' },
+    { Value: 2, Text: 'Hamdi' },
+    { Value: 3, Text: 'Farid' },
+    { Value: 4, Text: 'Kamel' }
+];
+
+export const suppliersNamesData: Record<string, any>[] = [
+    { Value: 1, Text: 'Salem' },
+    { Value: 2, Text: 'Houssin' },
+    { Value: 3, Text: 'Salma' },
+    { Value: 4, Text: 'Riadh' }
+];
+
+export const oxygenIdsData: Record<string, any>[] = [
+    { Value: 1, Text: '1' },
+    { Value: 2, Text: '2' },
+    { Value: 3, Text: '3' },
+    { Value: 4, Text: '4' }
 ];
 
 export const dayOfWeekList: Record<string, any>[] = [

@@ -58,6 +58,8 @@ import { RecentActivityComponent } from "./recent-activity/recent-activity.compo
 import { PreferenceComponent } from "./preference/preference.component";
 import { MainComponent } from "./main/main.component";
 import { LoginComponent } from "./login/login.component";
+import { PaymentsComponent } from './payments/payments.component';
+import { AddEditPaymentComponent } from './add-edit-payment/add-edit-payment.component';
 import { SuppliersComponent } from "./suppliers/suppliers.component";
 
 @NgModule({
@@ -80,9 +82,12 @@ import { SuppliersComponent } from "./suppliers/suppliers.component";
     MainComponent,
     LoginComponent,
     SuppliersComponent,
+    PaymentsComponent,
+    AddEditPaymentComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     ScheduleModule,
     RecurrenceEditorModule,

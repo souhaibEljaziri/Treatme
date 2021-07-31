@@ -1,0 +1,104 @@
+<div id='payment-wrapper' class="planner-payment-wrapper">
+    <header>
+        <div class="module-title">
+            <div class='title'>PAYMENTS LIST</div>
+            <div class='underline'></div>
+        </div>
+    </header>
+    <div class="payments-detail-wrapper">
+        <div class="payment-operations">
+            <div id='searchTemplate' class='search-wrapper planner-payment-search'>
+                <div class="e-input-group" role="search">
+                    <input id="schedule_searchbar" class="e-input" name="input" type="search"
+                        placeholder="Search Payment" (keyup)="paymentSearch($event)" />
+                    <span class="e-clear-icon" aria-label="close" role="button"
+                        (click)="paymentSearchCleared($event)"></span>
+                    <span id="schedule_searchbutton" class="e-input-group-icon search-icon e-icons" tabindex="-1"
+                        title="Search" aria-label="search"></span>
+                </div>
+            </div>
+        </div>
+        <div class="payment-display">
+            <ejs-grid #gridObj [dataSource]='filteredPayments' [editSettings]='editSettings'
+            (actionComplete)='onDataEdit($event)'>
+                <e-columns>
+                    <e-column field='id' headerText='Bill No' width='80' textAlign='Left'></e-column>
+                    <e-column field='patient' headerText='Patient Name' width='100' textAlign='Left'></e-column>
+                    <e-column field='supplier' headerText='Supplier Name' width='100' textAlign='Left'></e-column>
+                    <e-column field='oxygen' headerText='Oxygen ID' width='100' textAlign='Left'></e-column>
+                    <e-column field='date' headerText='Created At' width='100' textAlign='Left'></e-column>
+                    <e-column field='price' headerText='Price' width='100' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <span>{{data.price}} DT</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field='tax' headerText='Tax' width='100' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <span>{{data.tax}} %</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field='total' headerText='Total' width='100' textAlign='Left'>
+                        <ng-template #template let-data>
+                            <span>{{data.total}} DT</span>
+                        </ng-template>
+                    </e-column>
+                </e-columns>
+                <ng-template #editSettingsTemplate let-data>
+                    <div class='grid-edit-dialog'>
+                        <div class='field-row'>
+                            <label> Bill No </label><span id='id'></span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Patient Name </label><span id='patient'></span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Supplier Name </label><span id='supplier'></span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Oxygen ID </label><span id='oxygen'></span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Date </label><span id='date'></span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Price </label><span id='price'></span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Tax </label><span id='tax'></span>
+                        </div>
+                        <div class='field-row'>
+                            <label> Total </label><span id='total'></span>
+                        </div>
+                    </div>
+                </ng-template>
+            </ejs-grid>
+        </div>
+    </div>
+<div class="mdc-touch-target-wrapper">
+    <button class="mdc-fab mdc-fab--mini mdc-fab--touch" (click)='onAddPayment()'>
+        <div class="mdc-fab__ripple"></div>
+        <span class="material-icons mdc-fab__icon">add</span>
+        <div class="mdc-fab__touch"></div>
+    </button>
+</div>
+</div>
+<app-add-edit-payment #addEditPaymentObj (refreshEvent)="gridRefresh()"></app-add-edit-payment>
+<div class="delete-confirmation-container" style="display:none">
+    <ejs-dialog #deleteConfirmationDialogObj width='445px' cssClass='break-hour-dialog' [isModal]='true'
+        [visible]='false' [animationSettings]='animationSettings' header='Patient Details' [showCloseIcon]='true'
+        target='body'>
+        <ng-template #content>
+            <form>
+                <div>
+                    Are you sure you want to delete this patient?
+                </div>
+            </form>
+        </ng-template>
+        <ng-template #footerTemplate>
+            <div class="button-container">
+                <button ejs-button cssClass="e-normal" [isPrimary]="true" (click)='onDeleteClick()'>Ok</button>
+                <button ejs-button cssClass="e-normal" (click)='onDeleteCancelClick()'>Cancel</button>
+            </div>
+        </ng-template>
+    </ejs-dialog>
+  </div>

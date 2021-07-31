@@ -4,37 +4,36 @@ import { DataManager, Query, ReturnOption } from '@syncfusion/ej2-data';
 import { Dialog, DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { Button } from '@syncfusion/ej2-angular-buttons';
 import { EditService, PageService, EditSettingsModel, GridComponent, DialogEditEventArgs } from '@syncfusion/ej2-angular-grids';
-import { AddEditOxygenComponent } from '../add-edit-oxygen/add-edit-oxygen.component';
-import { RestService, Oxygen } from '../rest.service';
+import { AddEditPaymentComponent } from '../add-edit-payment/add-edit-payment.component';
+import { RestService, Payment } from '../rest.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import {MDCRipple} from '@material/ripple';
 
 @Component({
-  selector: 'app-oxygen',
-  templateUrl: './oxygen.component.html',
-  styleUrls: ['./oxygen.component.scss'],
+  selector: 'app-payments',
+  templateUrl: './payments.component.html',
+  styleUrls: ['./payments.component.scss'],
   providers: [EditService, PageService],
   encapsulation: ViewEncapsulation.None
 })
-export class OxygenComponent implements OnInit, OnDestroy {
+export class PaymentsComponent implements OnInit, OnDestroy {
   @ViewChild('gridObj') gridObj: GridComponent;
-  @ViewChild('addEditOxygenObj') addEditOxygenObj: AddEditOxygenComponent;
-  //@ViewChild('onRequestOxygenObj') onRequestOxygenObj: RequestOxygenComponent;
+  @ViewChild('addEditPaymentObj') addEditPaymentObj: AddEditPaymentComponent;
   @ViewChild('deleteConfirmationDialogObj')
   public deleteConfirmationDialogObj: DialogComponent;
-  public oxygenData: Record<string, any>[];
-  public filteredOxygen: Record<string, any>[];
-  public activeOxygenData: Record<string, any>;
-  public hospitalData: Record<string, any>[];
-  public doctorsData: Record<string, any>[];
+  public paymentsData: Record<string, any>;
+  public filteredPayments: Record<string, any>;
+  public activePaymentData: Record<string, any>;
   public intl: Internationalization = new Internationalization();
   public editSettings: EditSettingsModel;
   public gridDialog: Dialog;
   public animationSettings: Record<string, any> = { effect: 'None' };
-
+  
+  
   private subscription:Subscription;
   constructor(public restService: RestService, private router: Router) {
-    this.getOxygen();
+    this.getPayments();
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
@@ -44,7 +43,8 @@ export class OxygenComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.restService.updateActiveItem('oxygen');
+    this.restService.updateActiveItem('payments');
+    const fabRipple = new MDCRipple(document.querySelector('.mdc-fab'));
   }
 
   ngOnDestroy(): void {
@@ -54,32 +54,31 @@ export class OxygenComponent implements OnInit, OnDestroy {
   public onDataEdit(args: DialogEditEventArgs): void {
     if (args.requestType === 'beginEdit') {
       let data = args.rowData as Record<string, any>;
-      this.activeOxygenData = data;
-      console.log(this.activeOxygenData)
-      this.getOxygenById(data.id);
-      console.log(data);
+      this.activePaymentData = data;
+      this.getPaymentById(data.id);
       this.gridDialog = args.dialog as Dialog;
-      this.gridDialog.header = 'Oxygen Details';
-      const fields: Array<string> = ['id', 'supplier', 'waterCapacity', 'oxygenCapacity', 'status', 'price'];
+      this.gridDialog.header = 'Payment Details';
+      const fields: Array<string> = ['id', 'patient', 'supplier', 'oxygen', 'date', 'price', 'tax', 'total'];
       fields.forEach(field => {
         let value: string;
-          value = isNullOrUndefined(this.activeOxygenData[field]) ? '' : this.activeOxygenData[field].toString();
-          (args.dialog as Dialog).element.querySelector('#' + field).innerHTML = value;
+        value = isNullOrUndefined(this.activePaymentData[field]) ? '' : this.activePaymentData[field].toString();
+        (args.dialog as Dialog).element.querySelector('#' + field).innerHTML = value;
       });
+      //this.gridDialog.element.querySelector('.history-row').appendChild(this.getHistoryDetails());
       const editButtonElement: HTMLElement = createElement('button', {
-        className: 'edit-oxygen',
+        className: 'edit-payment',
         id: 'edit',
         innerHTML: 'Edit',
         attrs: { type: 'button', title: 'Edit' }
       });
-      editButtonElement.onclick = this.onEditOxygen.bind(this);
+      editButtonElement.onclick = this.onEditPayment.bind(this);
       const deleteButtonElement: HTMLElement = createElement('button', {
-        className: 'delete-oxygen',
+        className: 'delete-payment',
         id: 'delete',
         innerHTML: 'Delete',
         attrs: { type: 'button', title: 'Delete', content: 'DELETE' }
       });
-      deleteButtonElement.onclick = this.onDeleteOxygen.bind(this);
+      deleteButtonElement.onclick = this.onDeletePayment.bind(this);
       this.gridDialog.element.querySelector('.e-footer-content').appendChild(deleteButtonElement);
       this.gridDialog.element.querySelector('.e-footer-content').appendChild(editButtonElement);
       const editButton: Button = new Button({ isPrimary: true });
@@ -89,12 +88,12 @@ export class OxygenComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onDeleteOxygen(): void {
+  public onDeletePayment(): void {
     this.deleteConfirmationDialogObj.show();
   }
 
   public onDeleteClick(): void {
-    this.deleteOxygen(this.activeOxygenData.id);
+    this.deletePayment(this.activePaymentData.id);
     this.gridObj.closeEdit();
     this.deleteConfirmationDialogObj.hide();
   }
@@ -103,64 +102,64 @@ export class OxygenComponent implements OnInit, OnDestroy {
     this.deleteConfirmationDialogObj.hide();
   }
 
-  public onEditOxygen(): void {
+  public onEditPayment(): void {
     this.gridObj.closeEdit();
-    this.addEditOxygenObj.showDetails();
+    this.addEditPaymentObj.showDetails();
   }
 
-  public onAddOxygen(): void {
-    this.addEditOxygenObj.onAddOxygen();
+  public onAddPayment(): void {
+    this.addEditPaymentObj.onAddPayment();
   }
 
-  getOxygen(): void {
-    this.subscription = this.restService.getOxygen().subscribe((resp: any) => {
-      this.oxygenData = this.filteredOxygen = resp;
-      this.activeOxygenData = this.filteredOxygen[0];
+  getPayments(): void {
+    this.subscription = this.restService.getPayments().subscribe((resp: any) => {
+      this.paymentsData = this.filteredPayments = resp;
+      this.activePaymentData = this.filteredPayments[0];
     });
   }
 
-  getOxygenById(id: string): void {
-    this.subscription = this.restService.getOxygenById(id).subscribe((resp: any) => {
-      this.restService.setActiveOxygenData(resp);
+  getPaymentById(id: string): void {
+    this.subscription = this.restService.getPaymentById(id).subscribe((resp: any) => {
+      this.restService.setActivePaymentData(resp);
     });
   }
 
-  deleteOxygen(id: string): void {
-    this.restService.deleteOxygen(id)
+  deletePayment(id: string): void {
+    this.restService.deletePayment(id)
       .subscribe(() => {
-        this.oxygenData = this.oxygenData.filter((item: Record<string, any>) => item.id !== id);
-        this.filteredOxygen = this.oxygenData;
+        this.paymentsData = this.paymentsData.filter((item: Record<string, any>) => item.id !== id);
+        this.filteredPayments = this.paymentsData;
         }, (err) => {
           console.log(err);
         });
   }
 
-  public oxygenSearch(args: KeyboardEvent): void {
+  public paymentSearch(args: KeyboardEvent): void {
     const searchString: string = (args.target as HTMLInputElement).value;
     if (searchString !== '') {
-      new DataManager(this.oxygenData).executeQuery(new Query().
-        search(searchString, ['id', 'supplier', 'waterCapacity', 'oxygenCapacity', 'status', 'price'], null, true, true)).then((e: ReturnOption) => {
+      new DataManager(this.paymentsData).executeQuery(new Query().
+        search(searchString, ['id', 'patient', 'supplier', 'oxygen', 'date', 'price', 'tax', 'total'], null, true, true)).then((e: ReturnOption) => {
           if ((e.result as any).length > 0) {
-            this.filteredOxygen = e.result as Record<string, any>[];
+            this.filteredPayments = e.result as Record<string, any>[];
           } else {
-            this.filteredOxygen = [];
+            this.filteredPayments = [];
           }
         });
     } else {
-      this.oxygenSearchCleared(args as any);
+      this.paymentSearchCleared(args as any);
     }
   }
 
-  public oxygenSearchCleared(args: MouseEvent): void {
-    this.filteredOxygen = this.oxygenData;
+  public paymentSearchCleared(args: MouseEvent): void {
+    this.filteredPayments = this.paymentsData;
     if ((args.target as HTMLElement).previousElementSibling) {
       ((args.target as HTMLElement).previousElementSibling as HTMLInputElement).value = '';
     }
   }
 
   public gridRefresh(): void {
-    this.restService.getOxygen();
-    this.filteredOxygen = this.oxygenData;
+    this.restService.getPayments();
+    this.filteredPayments = this.paymentsData;
     this.gridObj.refresh();
   }
 }
