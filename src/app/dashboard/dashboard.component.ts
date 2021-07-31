@@ -34,11 +34,11 @@ export class DashboardComponent implements OnInit {
 
   constructor(private dataService: DataService) { }
 
-  public ngOnInit(): void {
+  public async ngOnInit() {
     this.dataService.updateActiveItem('dashboard');
     this.hospitalData = this.dataService.getHospitalData();
     this.fn();
-    this.patientsData = this.dataService.getPatientsData();
+    this.patientsData =await this.dataService.getPatientsData();
     const startDate: Date = this.dataService.selectedDate;
     const firstDayOfWeek: Date = getWeekFirstDate(startDate, this.dataService.calendarSettings.firstDayOfWeek);
     const currentDayEvents: Record<string, any>[] = this.getFilteredData(startDate,

@@ -8,6 +8,7 @@ import { CalendarSettings } from './calendar-settings';
 import { FormValidator, FormValidatorModel } from '@syncfusion/ej2-angular-inputs';
 import { createElement, remove, removeClass } from '@syncfusion/ej2-base';
 import { DoctorsService } from './doctors/doctors.service';
+import { PatientService } from './patient.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class DataService {
   public shift2BlockEvents: Record<string, any>[] = shift2BlockData;
   public shift3BlockEvents: Record<string, any>[] = shift3BlockData;
 
-  constructor(private doctorsService: DoctorsService) {
+  constructor(private doctorsService: DoctorsService,private patientService:PatientService) {
     this.patientsData = patientsData as Record<string, any>[];
     this.oxygenData = oxygenData as Record<string, any>[];
     this.paymentsData = paymentsData as Record<string, any>[];
@@ -85,7 +86,25 @@ export class DataService {
       }
     }
   }
+ convertDataAfterGetPatient(data :  any[]) : any[]{
+   let outData : any[] = []
+data.forEach((element : any) => {
+  outData.push({  Id: element.id,
+    Name: element.patientname,
+    Text: element.text,
+    DOB: new Date(element.dateofbirth),
+    Mobile: element.mobilephone,
+    Email: element.email,
+    Address: element.address,
+    Disease: element.disease,
+    DepartmentName: element.patientname,
+    BloodGroup: element.bloodgroup,
+    Gender: element.gender,
+    Symptoms: element.blood_group})
+});
 
+return outData;
+ }
   public getCalendarSettings(): CalendarSettings {
     return this.calendarSettings;
   }
@@ -194,7 +213,9 @@ export class DataService {
     this.patientsData = data;
   }
 
-  public getPatientsData(): Record<string, any>[] {
+  public async getPatientsData() {
+    let data = await this.patientService.findAll().toPromise();
+    this.patientsData = this.convertDataAfterGetPatient(data['hydra:member']);
     return this.patientsData;
   }
 

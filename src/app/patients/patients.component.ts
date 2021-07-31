@@ -30,7 +30,13 @@ export class PatientsComponent implements OnInit {
   public animationSettings: Record<string, any> = { effect: 'None' };
 
   constructor(public dataService: DataService) {
-    this.patientsData = this.filteredPatients = this.dataService.getPatientsData();
+this.fnP();
+  }
+ async fnP() {
+    this.patientsData = this.filteredPatients =await this.dataService.getPatientsData();
+    console.clear()
+    console.log(this.patientsData);
+    
     this.hospitalData = this.dataService.getHospitalData();
     this.fn();
     this.activePatientData = this.filteredPatients[0];
@@ -167,8 +173,8 @@ export class PatientsComponent implements OnInit {
     }
   }
 
-  public gridRefresh(): void {
-    this.patientsData = this.dataService.getPatientsData();
+  public async gridRefresh() {
+    this.patientsData =await this.dataService.getPatientsData();
     this.filteredPatients = this.patientsData;
     this.gridObj.refresh();
   }

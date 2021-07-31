@@ -105,7 +105,7 @@ export class CalendarComponent implements OnInit {
   public nameValidation: (args: { [key: string]: string }) => boolean = (args: { [key: string]: string }) =>
     this.patientsData.filter((item: Record<string, any>) => item.Name === args.value).length > 0;
 
-  public ngOnInit(): void {
+  public async ngOnInit() {
     this.eventData = this.hospitalData = this.dataService.getHospitalData();
     this.calendarSettings = this.dataService.getCalendarSettings();
     this.eventSettings = {
@@ -133,7 +133,7 @@ export class CalendarComponent implements OnInit {
       resourceColorField: this.calendarSettings.bookingColor
     };
     this.dataService.updateActiveItem('calendar');
-    this.patientsData = this.dataService.getPatientsData();
+    this.patientsData =await this.dataService.getPatientsData();
     this.specialistCategory = this.dataService.specialistData;
     this.activeDoctorData = [];
     this.fn()

@@ -31,8 +31,11 @@ export class AddEditPatientComponent {
   public doctorsData: Record<string, any>[];
 
   constructor(private dataService: DataService) {
+  this.fn2();
+  }
+ async fn2() {
     this.bloodGroupData = this.dataService.bloodGroupData;
-    this.patientsData = this.dataService.getPatientsData();
+    this.patientsData =await this.dataService.getPatientsData();
     this.hospitalData = this.dataService.getHospitalData();
     this.fn();
     this.activePatientData = this.dataService.getActivePatientData();
@@ -51,7 +54,7 @@ export class AddEditPatientComponent {
     this.newPatientObj.hide();
   }
 
-  public onSaveClick(): void {
+  public async onSaveClick() {
     const formElementContainer: HTMLElement = document.querySelector('.new-patient-dialog #new-patient-form');
     if (formElementContainer && formElementContainer.classList.contains('e-formvalidator') &&
       !((formElementContainer as EJ2Instance).ej2_instances[0] as FormValidator).validate()) {
@@ -78,7 +81,7 @@ export class AddEditPatientComponent {
         }
       }
     }
-    this.patientsData = this.dataService.getPatientsData();
+    this.patientsData = await this.dataService.getPatientsData();
     if (this.dialogState === 'new') {
       obj.Id = Math.max.apply(Math, this.patientsData.map((data: Record<string, any>) => data.Id)) + 1;
       obj.NewPatientClass = 'new-patient';
