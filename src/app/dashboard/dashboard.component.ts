@@ -6,6 +6,9 @@ import {
 } from '@syncfusion/ej2-angular-charts';
 import { addDays, getWeekFirstDate, resetTime } from '@syncfusion/ej2-angular-schedule';
 import { DataService } from '../data.service';
+import { PatientService } from '../services/patient.service';
+import { DoctorsService } from '../doctors/doctors.service';
+import { ApointmentService } from '../services/appointment.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,13 +35,13 @@ export class DashboardComponent implements OnInit {
   public initialChartLoad = true;
   primaryYAxis2: { title: string; minimum: number; maximum: number; interval: number; };
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private patientService: PatientService, private doctorService: DoctorsService, private apointmentService: ApointmentService) { }
 
   public async ngOnInit() {
     this.dataService.updateActiveItem('dashboard');
     this.hospitalData = this.dataService.getHospitalData();
     this.fn();
-    this.patientsData =await this.dataService.getPatientsData();
+    this.patientsData = await this.dataService.getPatientsData();
     const startDate: Date = this.dataService.selectedDate;
     const firstDayOfWeek: Date = getWeekFirstDate(startDate, this.dataService.calendarSettings.firstDayOfWeek);
     const currentDayEvents: Record<string, any>[] = this.getFilteredData(startDate,
@@ -105,13 +108,32 @@ export class DashboardComponent implements OnInit {
             Symptoms: eventData.Symptoms,
             DoctorId: filteredDoctors[0].Id
           };
-          this.gridData.push(newData);
+
+
+          // this.gridData.push(newData);
         }
       }
     }
+    let app = await this.apointmentService.findAll().toPromise();
+    let doctor: any;
+    let patient: any;
+    let gridData:any[] = [];
+    app['hydra:member'].forEach(async (element: any) => {
+      doctor = await this.doctorService.find(element.doctor.split('/')[3]).toPromise();
+      patient = await this.patientService.find(element.patient.split('/')[3]).toPromise();
+      gridData.push({
+        Time: this.getDate(new Date()),
+        Name: patient.patientname,
+        DoctorName: doctor.doctorname,
+        Symptoms: patient.symptoms,
+        DoctorId: element.doctor.split('/')[3]
+      })
+    });
+    this.gridData = gridData;
+    
   }
-  async fn(){
-    this.doctorsData =await this.dataService.getDoctorsData();
+  async fn() {
+    this.doctorsData = await this.dataService.getDoctorsData();
   }
   public getChartData(data: Record<string, any>[], startDate: Date): Record<string, any> {
     const filteredData: Record<string, any>[] = data.filter((item: { [key: string]: Date }) =>

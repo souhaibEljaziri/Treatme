@@ -44,8 +44,7 @@ export class DoctorsService {
     }
 
     return this.httpClient.get<any>(
-      `${BASE_PATH}/doctors`,
-      { params: params }
+      `${BASE_PATH}/doctors/`+id.toString()
     );
   }
   delete(

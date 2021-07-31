@@ -7,6 +7,7 @@ import { EJ2Instance } from '@syncfusion/ej2-angular-schedule';
 import { DatePicker } from '@syncfusion/ej2-angular-calendars';
 import { FormValidator, MaskedTextBoxComponent } from '@syncfusion/ej2-angular-inputs';
 import { DataService } from '../data.service';
+import { PatientService } from '../services/patient.service';
 
 @Component({
   selector: 'app-add-edit-patient',
@@ -30,18 +31,18 @@ export class AddEditPatientComponent {
   public hospitalData: Record<string, any>[];
   public doctorsData: Record<string, any>[];
 
-  constructor(private dataService: DataService) {
-  this.fn2();
+  constructor(private dataService: DataService,private patientService:PatientService) {
+    this.fn2();
   }
- async fn2() {
+  async fn2() {
     this.bloodGroupData = this.dataService.bloodGroupData;
-    this.patientsData =await this.dataService.getPatientsData();
+    this.patientsData = await this.dataService.getPatientsData();
     this.hospitalData = this.dataService.getHospitalData();
     this.fn();
     this.activePatientData = this.dataService.getActivePatientData();
   }
-  async fn(){
-    this.doctorsData =await this.dataService.getDoctorsData();
+  async fn() {
+    this.doctorsData = await this.dataService.getDoctorsData();
   }
   public onAddPatient(): void {
     this.dialogState = 'new';
@@ -60,7 +61,7 @@ export class AddEditPatientComponent {
       !((formElementContainer as EJ2Instance).ej2_instances[0] as FormValidator).validate()) {
       return;
     }
-    const obj: Record<string, any> = this.dialogState === 'new' ? {} : this.activePatientData;
+    let obj:  any = this.dialogState === 'new' ? {} : this.activePatientData;
     const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-patient-dialog .e-field'));
     for (const curElement of formElement) {
       let columnName: string = curElement.querySelector('input').name;
@@ -86,6 +87,8 @@ export class AddEditPatientComponent {
       obj.Id = Math.max.apply(Math, this.patientsData.map((data: Record<string, any>) => data.Id)) + 1;
       obj.NewPatientClass = 'new-patient';
       this.patientsData.push(obj);
+      obj = this.convertToSave(obj, 'ADD')
+      await this.patientService.save(obj).toPromise();
     } else {
       this.activePatientData = obj;
       this.patientsData.forEach((patientData: Record<string, any>) => {
@@ -94,6 +97,8 @@ export class AddEditPatientComponent {
         }
       });
       this.dataService.setActivePatientData(this.activePatientData);
+      obj = this.convertToSave(obj,'EDIT')
+      await this.patientService.update(obj).toPromise();
     }
     const activityObj: Record<string, any> = {
       Name: this.dialogState === 'new' ? 'Added New Patient' : 'Updated Patient',
@@ -107,6 +112,27 @@ export class AddEditPatientComponent {
     this.refreshEvent.emit();
     this.resetFormFields();
     this.newPatientObj.hide();
+  }
+  convertToSave(obj: any, arg1: string): any {
+    let data:any={};
+    data = ({
+      patientname: obj.Name,
+      text: obj.Text,
+      dateofbirth: new Date(obj.DOB),
+      mobilephone: obj.Mobile,
+      email: obj.Email,
+      address: obj.Address,
+      disease: obj.Disease,
+      department_name: obj.DepartmentName,
+      bloodgroup: obj.BloodGroup,
+      gender: obj.Gender,
+      symptoms: obj.Symptoms
+    })
+    if (arg1 == 'EDIT') {
+      data['id'] = obj.Id;
+    }
+    
+    return data;
   }
 
   public resetFormFields(): void {

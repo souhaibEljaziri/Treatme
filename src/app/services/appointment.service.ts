@@ -5,7 +5,7 @@ const BASE_PATH = "http://127.0.0.1:8000/api";
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService {
+export class ApointmentService {
 
   constructor(private httpClient: HttpClient) { }
   update(body?: any): Observable<any> {
@@ -16,7 +16,7 @@ export class PatientService {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
 
     return this.httpClient.put<any>(
-      `${BASE_PATH}/patients/`+body.id,
+      `${BASE_PATH}/appointments/`+body.id,
       body,
       { headers: headers }
     );
@@ -29,7 +29,7 @@ export class PatientService {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
 
     return this.httpClient.post<any>(
-      `${BASE_PATH}/patients`,
+      `${BASE_PATH}/appointments`,
       body,
       { headers: headers }
     );
@@ -44,7 +44,8 @@ export class PatientService {
     }
 
     return this.httpClient.get<any>(
-      `${BASE_PATH}/patients/`+id.toString()
+      `${BASE_PATH}/appointments`,
+      { params: params }
     );
   }
   delete(
@@ -52,14 +53,14 @@ export class PatientService {
   ): Observable<any> {
 
     return this.httpClient.delete<any>(
-      `${BASE_PATH}/patients/`+id.toString()
+      `${BASE_PATH}/appointments/`+id.toString()
     );
   }
   findAll(): Observable<any> {
     let params = new HttpParams();
 
     return this.httpClient.get<any>(
-      `${BASE_PATH}/patients`,
+      `${BASE_PATH}/appointments`,
       { params: params }
     );
   }

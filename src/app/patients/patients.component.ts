@@ -6,6 +6,7 @@ import { Button } from '@syncfusion/ej2-angular-buttons';
 import { EditService, PageService, EditSettingsModel, GridComponent, DialogEditEventArgs } from '@syncfusion/ej2-angular-grids';
 import { AddEditPatientComponent } from '../add-edit-patient/add-edit-patient.component';
 import { DataService } from '../data.service';
+import { DoctorsService } from '../doctors/doctors.service';
 
 @Component({
   selector: 'app-patients',
@@ -29,7 +30,7 @@ export class PatientsComponent implements OnInit {
   public gridDialog: Dialog;
   public animationSettings: Record<string, any> = { effect: 'None' };
 
-  constructor(public dataService: DataService) {
+  constructor(public dataService: DataService,public doctorsService:DoctorsService) {
 this.fnP();
   }
  async fnP() {
@@ -107,11 +108,12 @@ this.fnP();
     this.deleteConfirmationDialogObj.show();
   }
 
-  public onDeleteClick(): void {
+  public async onDeleteClick() {
     this.patientsData = this.patientsData.filter((item: Record<string, any>) => item.Id !== this.activePatientData.Id);
     this.filteredPatients = this.patientsData;
     this.dataService.setPatientsData(this.patientsData);
     this.gridObj.closeEdit();
+    await this.doctorsService.delete(this.activePatientData.Id).toPromise()
     this.deleteConfirmationDialogObj.hide();
   }
 
