@@ -137,6 +137,7 @@ export class AddEditPatientComponent {
     this.title = 'Edit Patient';
     this.newPatientObj.show();
     this.activePatientData = this.dataService.getActivePatientData();
+    console.log(this.activePatientData)
     const obj: Record<string, any> = this.activePatientData;
     const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-patient-dialog .e-field'));
     for (const curElement of formElement) {

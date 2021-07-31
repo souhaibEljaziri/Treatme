@@ -28,25 +28,22 @@
             <ejs-grid #gridObj [dataSource]='filteredOxygen' [editSettings]='editSettings'
                 (actionComplete)='onDataEdit($event)'>
                 <e-columns>
-                    <e-column field='Id' width='50' headerText='ID' textAlign='Left'></e-column>
-                    <e-column field='Supplier' width='100' textAlign='Left'>
+                    <e-column field='id' width='50' headerText='ID' textAlign='Left'></e-column>
+                    <e-column field='supplier' width='100' textAlign='Left'></e-column>
+                    <e-column field='waterCapacity' headerText='Water Capacity' width='100' textAlign='Left'>
                         <ng-template #template let-data>
-                            <span class="oxygen-name" (click)='onOxygenClick($event)'>{{data.Name}}</span>
+                            <span>{{data.waterCapacity}} Litres</span>
                         </ng-template>
                     </e-column>
-                    <e-column field='WaterCapacity' headerText='Water Capacity' width='100' textAlign='Left'></e-column>
-                    <e-column field='OxygenCapacity' headerText='Oxygen Capacity' width='100' textAlign='Left'></e-column>
-                    <e-column field='Status' width='80' textAlign='Left'></e-column>
-                    <e-column field='Price' width='80' textAlign='Left'>
+                    <e-column field='oxygenCapacity' headerText='Oxygen Capacity' width='100' textAlign='Left'>
                         <ng-template #template let-data>
-                            <span>{{data.Price ? data.Price + ' DT' : 'Free'}}</span>
+                            <span>{{data.oxygenCapacity}} Litres</span>
                         </ng-template>
                     </e-column>
-                    <e-column field='Action' width='80' textAlign='Left'>
+                    <e-column field='status' width='80' textAlign='Left'></e-column>
+                    <e-column field='price' width='80' textAlign='Left'>
                         <ng-template #template let-data>
-                            <button ejs-button cssClass="e-success e-round add-details" (click)='onRequestOxygen()'>
-                                <i class="fa fa-handshake-o"></i>
-                            </button>
+                            <span>{{data.price}} DT</span>
                         </ng-template>
                     </e-column>
                 </e-columns>
@@ -56,29 +53,29 @@
                             <div class="col-lg-8 col-md-8 col-sm-8 text-display">
                                 <div class="e-card-content">
                                     <div class='field-row'>
-                                        <label> Oxygen Id </label><span id='Id'>{{activeOxygenData.Id}}</span>
+                                        <label> Oxygen Id </label><span id='id'></span>
                                     </div>
                                     <div class='field-row'>
-                                        <label> Supplier Name </label><span id='Name'>{{activeOxygenData.Supplier}}</span>
+                                        <label> Supplier Name </label><span id='supplier'></span>
                                     </div>
                                     <div class='field-row'>
-                                        <label> Water Capacity </label><span id='WaterCapacity'>{{activeOxygenData.WaterCapacity}}</span>
+                                        <label> Water Capacity </label><span id='waterCapacity'></span>
                                     </div>
                                     <div class='field-row'>
-                                        <label> Oxygen Capacity </label><span id='OxygenCapacity'>{{activeOxygenData.OxygenCapacity}}</span>
+                                        <label> Oxygen Capacity </label><span id='oxygenCapacity'></span>
                                     </div>
                                     <div class='field-row'>
-                                        <label> Status </label><span id='Status'>{{activeOxygenData.Status}}</span>
+                                        <label> Status </label><span id='status'></span>
                                     </div>
                                     <div class='field-row'>
-                                        <label> Price </label><span id='Price'>{{activeOxygenData.Price}}</span>
+                                        <label> Price </label><span id='price'></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 text-display">
                                 <div class="e-card-content">
                                     <div>
-                                      <img class="oxygen-image" src="./assets/images/Oxygen/{{activeOxygenData.Id}}.jpg" alt="Oxygen" />
+                                      <img class="oxygen-image" src={{this.activeOxygenData.image}} onerror="this.src='./assets/images/defaultImg.png';" alt="Oxygen" />
                                     </div>
                                 </div>
                             </div>

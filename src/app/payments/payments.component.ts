@@ -1,8 +1,9 @@
 import { Component, ViewEncapsulation, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { Internationalization } from '@syncfusion/ej2-base';
+import { createElement, Internationalization, isNullOrUndefined } from '@syncfusion/ej2-base';
 import { DataManager, Query, ReturnOption } from '@syncfusion/ej2-data';
 import { Dialog, DialogComponent } from '@syncfusion/ej2-angular-popups';
-import { EditService, PageService, EditSettingsModel, GridComponent } from '@syncfusion/ej2-angular-grids';
+import { Button } from '@syncfusion/ej2-angular-buttons';
+import { EditService, PageService, EditSettingsModel, GridComponent, DialogEditEventArgs } from '@syncfusion/ej2-angular-grids';
 import { AddEditPaymentComponent } from '../add-edit-payment/add-edit-payment.component';
 import { RestService, Payment } from '../rest.service';
 import { Router } from '@angular/router';
@@ -50,6 +51,62 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  public onDataEdit(args: DialogEditEventArgs): void {
+    if (args.requestType === 'beginEdit') {
+      let data = args.rowData as Record<string, any>;
+      this.activePaymentData = data;
+      this.getPaymentById(data.id);
+      this.gridDialog = args.dialog as Dialog;
+      this.gridDialog.header = 'Payment Details';
+      const fields: Array<string> = ['id', 'patient', 'supplier', 'oxygen', 'date', 'price', 'tax', 'total'];
+      fields.forEach(field => {
+        let value: string;
+        value = isNullOrUndefined(this.activePaymentData[field]) ? '' : this.activePaymentData[field].toString();
+        (args.dialog as Dialog).element.querySelector('#' + field).innerHTML = value;
+      });
+      //this.gridDialog.element.querySelector('.history-row').appendChild(this.getHistoryDetails());
+      const editButtonElement: HTMLElement = createElement('button', {
+        className: 'edit-payment',
+        id: 'edit',
+        innerHTML: 'Edit',
+        attrs: { type: 'button', title: 'Edit' }
+      });
+      editButtonElement.onclick = this.onEditPayment.bind(this);
+      const deleteButtonElement: HTMLElement = createElement('button', {
+        className: 'delete-payment',
+        id: 'delete',
+        innerHTML: 'Delete',
+        attrs: { type: 'button', title: 'Delete', content: 'DELETE' }
+      });
+      deleteButtonElement.onclick = this.onDeletePayment.bind(this);
+      this.gridDialog.element.querySelector('.e-footer-content').appendChild(deleteButtonElement);
+      this.gridDialog.element.querySelector('.e-footer-content').appendChild(editButtonElement);
+      const editButton: Button = new Button({ isPrimary: true });
+      editButton.appendTo('#edit');
+      const deleteButton: Button = new Button();
+      deleteButton.appendTo('#delete');
+    }
+  }
+
+  public onDeletePayment(): void {
+    this.deleteConfirmationDialogObj.show();
+  }
+
+  public onDeleteClick(): void {
+    this.deletePayment(this.activePaymentData.id);
+    this.gridObj.closeEdit();
+    this.deleteConfirmationDialogObj.hide();
+  }
+
+  public onDeleteCancelClick(): void {
+    this.deleteConfirmationDialogObj.hide();
+  }
+
+  public onEditPayment(): void {
+    this.gridObj.closeEdit();
+    this.addEditPaymentObj.showDetails();
+  }
+
   public onAddPayment(): void {
     this.addEditPaymentObj.onAddPayment();
   }
@@ -61,12 +118,20 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public onPaymentClick(args: MouseEvent): void {
-    const rowIndex: string = (args.currentTarget as HTMLElement).parentElement.getAttribute('index');
-    setTimeout(() => {
-      this.gridObj.selectRow(parseInt(rowIndex, 10));
-      this.gridObj.startEdit();
+  getPaymentById(id: string): void {
+    this.subscription = this.restService.getPaymentById(id).subscribe((resp: any) => {
+      this.restService.setActivePaymentData(resp);
     });
+  }
+
+  deletePayment(id: string): void {
+    this.restService.deletePayment(id)
+      .subscribe(() => {
+        this.paymentsData = this.paymentsData.filter((item: Record<string, any>) => item.id !== id);
+        this.filteredPayments = this.paymentsData;
+        }, (err) => {
+          console.log(err);
+        });
   }
 
   public paymentSearch(args: KeyboardEvent): void {

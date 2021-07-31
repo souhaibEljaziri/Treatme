@@ -5,6 +5,7 @@ import { DialogComponent, BeforeOpenEventArgs } from '@syncfusion/ej2-angular-po
 import { DropDownList } from '@syncfusion/ej2-angular-dropdowns';
 import { EJ2Instance } from '@syncfusion/ej2-angular-schedule';
 import { FormValidator, MaskedTextBoxComponent } from '@syncfusion/ej2-angular-inputs';
+import { PaymentsComponent } from '../payments/payments.component';
 import { DataService } from '../data.service';
 import { RestService } from '../rest.service';
 import { Router } from '@angular/router';
@@ -18,6 +19,7 @@ import { Subscription } from 'rxjs';
 })
 export class AddEditPaymentComponent {
   @Output() refreshEvent = new EventEmitter<string>();
+  @ViewChild('PaymentObj') PaymentObj: PaymentsComponent;
   @ViewChild('newPaymentObj')
   public newPaymentObj: DialogComponent;
   public animationSettings: Record<string, any> = { effect: 'None' };
@@ -26,12 +28,17 @@ export class AddEditPaymentComponent {
   public patientsNamesData: Record<string, any>[];
   public suppliersNamesData: Record<string, any>[];
   public oxygenIdsData: Record<string, any>[];
+  public priceData: string;
+  public change: boolean = false;
   public fields: Record<string, any> = { text: 'Text', value: 'Value' };
   public paymentData: Record<string, any>[];
   public activePaymentData: Record<string, any>;
 
   private subscription:Subscription;
-  constructor(public restService: RestService, public dataService: DataService, private router: Router) {}
+  constructor(public restService: RestService, public dataService: DataService, private router: Router) {
+    this.getPatients();
+    this.getSuppliers();
+  }
 
   getPatients(): void {
     let obj: any[] = [];
@@ -39,7 +46,7 @@ export class AddEditPaymentComponent {
       resp.forEach((element: { id: any, patientName: any }) => {
         obj.push({Value: element.id, Text: element.patientName})    
       });
-      this.patientsNamesData = obj;  
+      this.patientsNamesData = obj;
     });
   }
 
@@ -53,30 +60,62 @@ export class AddEditPaymentComponent {
     });
   }
 
-  getOxygenBySupplier(id: string): void {
+  getOxygenById(id: string): void {
+    this.subscription = this.restService.getOxygenById(id).subscribe((resp: any) => {    
+      this.priceData = resp.price; 
+    });
+  }
+
+  getOxygenBySupplier(id: string, change: boolean): void {
+    if (change === false)
+      return;
     let obj: any[] = [];
     this.subscription = this.restService.getOxygenBySupplier(id).subscribe((resp: any) => {
       resp.forEach((element: { id: any }) => {
         obj.push({Value: element.id, Text: element.id})    
       });
-      this.oxygenIdsData = obj;  
+      this.oxygenIdsData = obj;
     });
   }
 
   addPayment(payment: any): void {
-    this.subscription = this.restService.addPayment(payment).subscribe((result) => {
+    console.log("adding...");
+    this.subscription = this.restService.addPayment(payment).subscribe((result: any) => {
       console.log(result);
+      this.refreshEvent.emit();
+      this.resetFormFields();
+      this.newPaymentObj.hide();
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/payments']);
+      });
+      this.change = false;
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  updatePayment(id: string, payment: any): void {
+    console.log("editing...");
+    this.subscription = this.restService.updatePayment(id, payment).subscribe((result: any) => {
+      console.log(result);
+      this.refreshEvent.emit();
+      this.resetFormFields();
+      this.newPaymentObj.hide();
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/payments']);
+      });
+      this.change = false;
     }, (err) => {
       console.log(err);
     });
   }
 
   public onAddPayment(): void {
+    this.resetFormFields();
     this.dialogState = 'new';
     this.title = 'New Payment';
     this.newPaymentObj.show();
-    this.getPatients();
-    this.getSuppliers();
+    this.change = true;
   }
 
   public onCancelClick(): void {
@@ -85,14 +124,21 @@ export class AddEditPaymentComponent {
     this.subscription.unsubscribe();
   }
 
-  public onChange(args: Record<string, any>): void {
-    this.getOxygenBySupplier(args.value);
+  public onChangeSupplierName(args: Record<string, any>): void {
+    this.getOxygenBySupplier(args.value, this.change);
+  }
+
+  public onChangeOxygenId(args: Record<string, any>): void {
+    if (args.value !== null)
+      this.getOxygenById(args.value);
+    else
+      this.priceData = "";
   }
 
   public onSaveClick(): void {
     const formElementContainer: HTMLElement = document.querySelector('.new-payment-dialog #new-payment-form');
     if (formElementContainer && formElementContainer.classList.contains('e-formvalidator') &&
-      !((formElementContainer as EJ2Instance).ej2_instances[0] as FormValidator).validate()) {
+      !((formElementContainer as EJ2Instance).ej2_instances[0] as FormValidator).validate() && this.dialogState === 'new') {
       return;
     }
     const obj: Record<string, any> = this.dialogState === 'new' ? {} : this.activePaymentData;
@@ -132,15 +178,11 @@ export class AddEditPaymentComponent {
     obj['total'] = (obj['price'] === '0' ?  '0' : obj['price'] + (obj['price'] * obj['tax'] / 100))
     if (this.dialogState === 'new') {
       obj.NewPaymentClass = 'new-payment';
+      this.addPayment(obj);
+    } else {
+      console.log(obj);
+      this.updatePayment(obj['id'], obj);
     }
-    this.addPayment(obj);
-    this.refreshEvent.emit();
-    this.resetFormFields();
-    this.newPaymentObj.hide();
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/payments']);
-     });
-    this.subscription.unsubscribe();
   }
 
   public resetFormFields(): void {
@@ -166,7 +208,8 @@ export class AddEditPaymentComponent {
     this.dialogState = 'edit';
     this.title = 'Edit Payment';
     this.newPaymentObj.show();
-    this.activePaymentData = this.dataService.getActivePaymentData();
+    this.activePaymentData = this.restService.getActivePaymentData();
+    this.getOxygenBySupplier(this.activePaymentData.supplier, true);
     const obj: Record<string, any> = this.activePaymentData;
     const formElement: HTMLInputElement[] = [].slice.call(document.querySelectorAll('.new-payment-dialog .e-field'));
     for (const curElement of formElement) {
@@ -177,8 +220,16 @@ export class AddEditPaymentComponent {
         if (columnName === '' && isCustomElement) {
           columnName = curElement.querySelector('select').name;
           const instance: DropDownList = (curElement.parentElement as EJ2Instance).ej2_instances[0] as DropDownList;
-          instance.value = obj[columnName] as string;
-          instance.dataBind();
+          if (columnName === "patientName" && instance.element.id === "patientName") {
+            columnName = "patient";
+            instance.value = obj[columnName] as string;
+            instance.dataBind();
+          }
+          if (columnName === "supplierName" && instance.element.id === "supplierName") {
+            columnName = "supplier";
+            instance.value = obj[columnName] as string;
+            instance.dataBind();
+          }
         } else if (columnName === 'Price' && obj[columnName] === 'Free') {
            obj[columnName] = 0;
         } else {
@@ -186,6 +237,7 @@ export class AddEditPaymentComponent {
         }
       }
     }
+    this.change = true;
   }
 
   public onBeforeOpen(args: BeforeOpenEventArgs): void {

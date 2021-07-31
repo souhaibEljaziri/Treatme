@@ -1,44 +1,43 @@
 <div class="new-payment-container" style="display:none">
-    <ejs-dialog #newPaymentObj width='390px' cssClass='new-payment-dialog' [isModal]='true' [visible]='false'
-      [animationSettings]='animationSettings' [header]='title' [showCloseIcon]='true' target='body'
-      (beforeOpen)='onBeforeOpen($event)'>
-      <ng-template #content>
-        <form id='new-payment-form'>
-          <div class="patient-name">
-            <ejs-dropdownlist id='patientName' width='125px' cssClass='e-field' placeholder='Patient Name' index=0
-              floatLabelType='Always' [dataSource]='patientsNamesData' [fields]='fields'>
+  <ejs-dialog #newPaymentObj width='390px' cssClass='new-payment-dialog' [isModal]='true' [visible]='false'
+    [animationSettings]='animationSettings' [header]='title' [showCloseIcon]='true' target='body'
+    (beforeOpen)='onBeforeOpen($event)'>
+    <ng-template #content>
+      <form id='new-payment-form'>
+        <div class="patient-name">
+          <ejs-dropdownlist id='patientName' width='125px' cssClass='e-field' placeholder='Patient Name' index=0
+            floatLabelType='Always' [dataSource]='patientsNamesData' [fields]='fields'>
+          </ejs-dropdownlist>
+        </div>
+        <div class="field-container owner-container">
+          <div class="supplier-name">
+            <ejs-dropdownlist id='supplierName' width='125px' cssClass='e-field' placeholder='Supplier Name' index=0
+              floatLabelType='Always' [dataSource]='suppliersNamesData' [fields]='fields' (change)='onChangeSupplierName($event)'>
             </ejs-dropdownlist>
           </div>
-          <div class="field-container owner-container">
-            <div class="supplier-name">
-              <ejs-dropdownlist id='supplierName' width='125px' cssClass='e-field' placeholder='Supplier Name' index=0
-                floatLabelType='Always' [dataSource]='suppliersNamesData' [fields]='fields' (change)='onChange($event)'>
-              </ejs-dropdownlist>
-            </div>
-            <div class="oxygen-id">
-              <ejs-dropdownlist id='oxygenId' width='125px' cssClass='e-field' placeholder='Oxygen ID' index=0
-                floatLabelType='Always' [dataSource]='oxygenIdsData' [fields]='fields'>
-              </ejs-dropdownlist>
-            </div>
+          <div class="oxygen-id">
+            <ejs-dropdownlist id='oxygenId' width='125px' cssClass='e-field' placeholder='Oxygen ID' index=0
+              floatLabelType='Always' [dataSource]='oxygenIdsData' (change)='onChangeOxygenId($event)' [fields]='fields' >
+            </ejs-dropdownlist>
           </div>
-          <div class="field-container price-container">
-            <div class="tax">
-              <ejs-textbox cssClass='e-field' id='tax' width='80px' name='tax' placeholder='Tax' floatLabelType='Always'>
-              </ejs-textbox>
-            </div>
-            <div class="price">
-              <ejs-textbox cssClass='e-field' id='price' width='80px' name='price' placeholder='Price' floatLabelType='Always' value='100' disabled>
-              </ejs-textbox>
-            </div>
-          </div>
-        </form>
-      </ng-template>
-      <ng-template #footerTemplate>
-        <div class="button-container">
-          <button ejs-button cssClass="e-normal" (click)='onCancelClick()'>Cancel</button>
-          <button ejs-button cssClass="e-normal" [isPrimary]="true" (click)='onSaveClick()'>Save</button>
         </div>
-      </ng-template>
-    </ejs-dialog>
-  </div>
-  
+        <div class="field-container price-container">
+          <div class="tax">
+            <ejs-textbox cssClass='e-field' id='tax' width='80px' name='tax' placeholder='Tax (%)' floatLabelType='Always'>
+            </ejs-textbox>
+          </div>
+          <div class="price">
+            <ejs-textbox cssClass='e-field' id='price' width='80px' name='price' placeholder='Price (DT)' floatLabelType='Always' value={{priceData}} disabled>
+            </ejs-textbox>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <div class="button-container">
+        <button ejs-button cssClass="e-normal" (click)='onCancelClick()'>Cancel</button>
+        <button ejs-button cssClass="e-normal" [isPrimary]="true" (click)='onSaveClick()'>Save</button>
+      </div>
+    </ng-template>
+  </ejs-dialog>
+</div>
