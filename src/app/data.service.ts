@@ -7,6 +7,7 @@ import { EventFieldsMapping } from '@syncfusion/ej2-schedule';
 import { CalendarSettings } from './calendar-settings';
 import { FormValidator, FormValidatorModel } from '@syncfusion/ej2-angular-inputs';
 import { createElement, remove, removeClass } from '@syncfusion/ej2-base';
+import { DoctorsService } from './doctors/doctors.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class DataService {
   public patientsData: Record<string, any>[];
   public oxygenData: Record<string, any>[];
   public paymentsData: Record<string, any>[];
-  public doctorsData: Record<string, any>[];
+  public doctorsData: any;
   public calendarSettings: CalendarSettings;
   public selectedDate: Date;
   public eventFields: EventFieldsMapping;
@@ -37,7 +38,7 @@ export class DataService {
   public shift2BlockEvents: Record<string, any>[] = shift2BlockData;
   public shift3BlockEvents: Record<string, any>[] = shift3BlockData;
 
-  constructor() {
+  constructor(private doctorsService: DoctorsService) {
     this.patientsData = patientsData as Record<string, any>[];
     this.oxygenData = oxygenData as Record<string, any>[];
     this.paymentsData = paymentsData as Record<string, any>[];
@@ -70,13 +71,13 @@ export class DataService {
         }
       }
     } else if (className.indexOf('oxygen') !== -1) {
-        for (const oxygenData of this.oxygenData) {
-          if (oxygenData.Id === activeData.Id) {
-            oxygenData[field] = value;
-          }
+      for (const oxygenData of this.oxygenData) {
+        if (oxygenData.Id === activeData.Id) {
+          oxygenData[field] = value;
         }
       }
-      else {
+    }
+    else {
       for (const patientData of this.patientsData) {
         if (patientData.Id === activeData.Id) {
           patientData[field] = value;
@@ -129,10 +130,58 @@ export class DataService {
     this.doctorsData = data;
   }
 
-  public getDoctorsData(): Record<string, any>[] {
-    return this.doctorsData;
+  public async getDoctorsData() {
+    this.doctorsData = (await this.doctorsService.findAll().toPromise());
+    return this.convertDataAfterGet(this.doctorsData['hydra:member']);
   }
+  public convertDataAfterGet(data: any[]) {
+    let outData: any[] = [];
+    data.forEach(element => {
 
+      let workDaysout: any[] = [];
+      if (element && element['workDays']) {
+        element['workDays'].forEach((res2: any) => {
+          workDaysout.push({
+            Day: res2.Day,
+            Index: res2.dex,
+            Enable: res2.Enable,
+            WorkStartHour: new Date(res2.WorkStartHour),
+            WorkEndHour: new Date(res2.WorkEndHour),
+            BreakStartHour: new Date(res2.BreakStartHour),
+            BreakEndHour: new Date(res2.BreakEndHour),
+            State: res2.state,
+          })
+
+        });
+
+        element['workDays'] = workDaysout;
+      }
+      outData.push({
+        Name: element.doctorname,
+        Gender: element.gender,
+        Text: element.text,
+        Id: element.id,
+        DepartmentId: element.departmentid,
+        Color: element.color,
+        Education: element.education,
+        Specialization: element.specilaisation,
+        Experience: element.experience,
+        Designation: element.designation,
+        DutyTiming: element.dutytiming,
+        Email: element.email,
+        Mobile: element.mobilephone,
+        Availability: element.availibility,
+        StartHour: element.StartHour,
+        EndHour: element.EndHour,
+        AvailableDays: element && element.AvailableDays ? element.AvailableDays.split(',') : "",
+        WorkDays: element['workDays']
+      })
+
+    });
+    console.log(outData);
+    
+    return outData;
+  }
   public addHospitalData(data: Record<string, any>[]): void {
     this.hospitalData = data;
   }

@@ -136,8 +136,8 @@ export class CalendarComponent implements OnInit {
     this.patientsData = this.dataService.getPatientsData();
     this.specialistCategory = this.dataService.specialistData;
     this.activeDoctorData = [];
-    this.specialistData = this.doctorsData = this.dataService.getDoctorsData();
-    this.resourceDataSource = this.dataService.getDoctorsData();
+    this.fn()
+ 
     this.field.dataSource = this.waitingList = this.dataService.getWaitingList();
     this.activeWaitingItem = this.waitingList;
     this.startHour = this.calendarSettings.calendar.start as string;
@@ -155,7 +155,10 @@ export class CalendarComponent implements OnInit {
       addClass([this.dropdownObj.element], 'e-specialist-hide');
     }
   }
-
+  async fn(){
+    this.specialistData = this.doctorsData =await this.dataService.getDoctorsData();
+    this.resourceDataSource =await this.dataService.getDoctorsData();
+  }
   public onActionBegin(args: ActionEventArgs): void {
     if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
       if (this.isTreeItemDropped) {

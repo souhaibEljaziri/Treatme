@@ -34,10 +34,12 @@ export class AddEditPatientComponent {
     this.bloodGroupData = this.dataService.bloodGroupData;
     this.patientsData = this.dataService.getPatientsData();
     this.hospitalData = this.dataService.getHospitalData();
-    this.doctorsData = this.dataService.getDoctorsData();
+    this.fn();
     this.activePatientData = this.dataService.getActivePatientData();
   }
-
+  async fn(){
+    this.doctorsData =await this.dataService.getDoctorsData();
+  }
   public onAddPatient(): void {
     this.dialogState = 'new';
     this.title = 'New Patient';

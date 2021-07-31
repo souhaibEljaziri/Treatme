@@ -34,6 +34,7 @@ import { MainComponent } from './main/main.component';
 import { LoginComponent } from './login/login.component';
 import { PaymentsComponent } from './payments/payments.component';
 import { AddEditPaymentComponent } from './add-edit-payment/add-edit-payment.component';
+import { DoctorsService } from './doctors/doctors.service';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,7 @@ import { AddEditPaymentComponent } from './add-edit-payment/add-edit-payment.com
     ReactiveFormsModule,
     ToastModule
   ],
-  providers: [{ provide: APP_BASE_HREF, useValue: '/' }, Location, { provide: LocationStrategy, useClass: HashLocationStrategy }],
+  providers: [{ provide: APP_BASE_HREF, useValue: '/' }, Location, { provide: LocationStrategy, useClass: HashLocationStrategy },DoctorsService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

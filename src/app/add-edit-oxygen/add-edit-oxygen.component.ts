@@ -34,10 +34,12 @@ export class AddEditOxygenComponent {
     this.oxygenCapacityData = this.dataService.oxygenCapacityData;
     this.oxygenData = this.dataService.getOxygenData();
     this.hospitalData = this.dataService.getHospitalData();
-    this.doctorsData = this.dataService.getDoctorsData();
+    this.fn();
     this.activeOxygenData = this.dataService.getActiveOxygenData();
   }
-
+  async fn(){
+    this.doctorsData =await this.dataService.getDoctorsData();
+  }
   public onAddOxygen(): void {
     this.dialogState = 'new';
     this.title = 'New Oxygen';

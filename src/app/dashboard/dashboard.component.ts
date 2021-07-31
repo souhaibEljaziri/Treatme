@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
   public ngOnInit(): void {
     this.dataService.updateActiveItem('dashboard');
     this.hospitalData = this.dataService.getHospitalData();
-    this.doctorsData = this.dataService.getDoctorsData();
+    this.fn();
     this.patientsData = this.dataService.getPatientsData();
     const startDate: Date = this.dataService.selectedDate;
     const firstDayOfWeek: Date = getWeekFirstDate(startDate, this.dataService.calendarSettings.firstDayOfWeek);
@@ -110,7 +110,9 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
-
+  async fn(){
+    this.doctorsData =await this.dataService.getDoctorsData();
+  }
   public getChartData(data: Record<string, any>[], startDate: Date): Record<string, any> {
     const filteredData: Record<string, any>[] = data.filter((item: { [key: string]: Date }) =>
       resetTime(startDate).getTime() === resetTime(new Date(item.StartTime)).getTime());

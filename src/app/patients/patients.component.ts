@@ -32,7 +32,7 @@ export class PatientsComponent implements OnInit {
   constructor(public dataService: DataService) {
     this.patientsData = this.filteredPatients = this.dataService.getPatientsData();
     this.hospitalData = this.dataService.getHospitalData();
-    this.doctorsData = this.dataService.getDoctorsData();
+    this.fn();
     this.activePatientData = this.filteredPatients[0];
     this.editSettings = {
       allowEditing: true,
@@ -41,7 +41,9 @@ export class PatientsComponent implements OnInit {
       mode: 'Dialog'
     };
   }
-
+  async fn(){
+    this.doctorsData =await this.dataService.getDoctorsData();
+  }
   public ngOnInit(): void {
     this.dataService.updateActiveItem('patients');
   }

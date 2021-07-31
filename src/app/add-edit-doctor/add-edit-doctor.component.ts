@@ -7,6 +7,7 @@ import { DialogComponent, BeforeOpenEventArgs } from '@syncfusion/ej2-angular-po
 import { DropDownList, DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { specializationData, experienceData, dutyTimingsData } from '../datasource';
 import { DataService } from '../data.service';
+import { DoctorsService } from '../doctors/doctors.service';
 
 @Component({
   selector: 'app-add-edit-doctor',
@@ -19,7 +20,7 @@ export class AddEditDoctorComponent {
   @ViewChild('newDoctorObj') newDoctorObj: DialogComponent;
   @ViewChild('specializationObj') specializationObj: DropDownListComponent;
 
-  public doctorsData: Record<string, any>[];
+  public doctorsData: any[];
   public activeDoctorData: Record<string, any>;
   public dialogState: string;
   public animationSettings: Record<string, any> = { effect: 'None' };
@@ -30,11 +31,13 @@ export class AddEditDoctorComponent {
   public experienceData: Record<string, any>[] = experienceData;
   public dutyTimingsData: Record<string, any>[] = dutyTimingsData;
 
-  constructor(private dataService: DataService) {
-    this.doctorsData = this.dataService.getDoctorsData();
+  constructor(private dataService: DataService,private doctorsService:DoctorsService) {
+    this.fn()
+  }
+  async fn() {
+    this.doctorsData = await this.dataService.getDoctorsData();
     this.activeDoctorData = this.dataService.getActiveDoctorData();
   }
-
   public onAddDoctor(): void {
     this.dialogState = 'new';
     this.title = 'New Doctor';
@@ -46,7 +49,7 @@ export class AddEditDoctorComponent {
     this.newDoctorObj.hide();
   }
 
-  public onSaveClick(): void {
+  public async onSaveClick() {
     const formElementContainer: HTMLElement = document.querySelector('.new-doctor-dialog #new-doctor-form');
     if (formElementContainer && formElementContainer.classList.contains('e-formvalidator') &&
       !((formElementContainer as EJ2Instance).ej2_instances[0] as FormValidator).validate()) {
@@ -82,22 +85,81 @@ export class AddEditDoctorComponent {
       obj.WorkDays = initialData.WorkDays;
       obj = this.updateWorkHours(obj);
       this.doctorsData.push(obj);
+      obj = this.convertToSave(obj,'ADD')
+      await this.doctorsService.save(obj).toPromise();
       this.dataService.setDoctorsData(this.doctorsData);
+
     } else {
       this.activeDoctorData = this.updateWorkHours(obj);
       this.dataService.setActiveDoctorData(this.activeDoctorData);
+      obj = this.convertToSave(obj,'EDIT')
+      await this.doctorsService.update(obj).toPromise();
     }
-    const activityObj: Record<string, any> = {
-      Name: this.dialogState === 'new' ? 'Added New Doctor' : 'Updated Doctor',
-      Message: `Dr.${obj.Name}, ${obj.Specialization.charAt(0).toUpperCase() + obj.Specialization.slice(1)}`,
-      Time: '10 mins ago',
-      Type: 'doctor',
-      ActivityTime: new Date()
-    };
-    this.dataService.addActivityData(activityObj);
+    // const activityObj: Record<string, any> = {
+    //   Name: this.dialogState === 'new' ? 'Added New Doctor' : 'Updated Doctor',
+    //   Message: `Dr.${obj.Name}, ${obj.Specialization.charAt(0).toUpperCase() + obj.Specialization.slice(1)}`,
+    //   Time: '10 mins ago',
+    //   Type: 'doctor',
+    //   ActivityTime: new Date()
+    // };
+    // this.dataService.addActivityData(activityObj);
+
     this.refreshDoctors.emit();
     this.resetFormFields();
     this.newDoctorObj.hide();
+  }
+  convertToSave(data: Record<string, any>,mode : String) {
+    let outData: any={};
+    // data.forEach((element : any) => {
+      if(mode == 'ADD'){
+      let workDaysout: any[] = [];
+      if (data && data['workDays']) {
+        data['workDays'].forEach((res2: any) => {
+          workDaysout.push({
+            Day: res2.Day,
+            dex: res2.Index,
+            Enable: res2.Enable,
+            WorkStartHour: new Date(res2.WorkStartHour),
+            WorkEndHour: new Date(res2.WorkEndHour),
+            BreakStartHour: new Date(res2.BreakStartHour),
+            BreakEndHour: new Date(res2.BreakEndHour),
+            state: res2.State,
+          })
+
+        });
+
+        data['workDays'] = workDaysout;
+      }
+      }
+      
+     
+      outData={
+        doctorname: data.Name,
+        gender: data.Gender,
+        text: data.Text,
+        departmentid: 1,
+        color: data.Color,
+        education: data.Education,
+        specilaisation: data.Specialization,
+        experience: data.Experience,
+        designation: data.Designation,
+        dutytiming: data.DutyTiming,
+        email: data.Email,
+        mobilephone: data.Mobile,
+        availibility: data.Availability,
+        StartHour: data.StartHour,
+        EndHour: data.EndHour,
+        AvailableDays: data && data.AvailableDays ? data.AvailableDays.toString() : "",
+        WorkDays: data['workDays']
+      }
+      if(mode == 'EDIT'){
+       outData['id'] = data.Id;
+       outData['departmentid'] = data.departmentid;
+      }
+    // });
+    console.log(outData);
+    
+    return outData;
   }
 
   public updateWorkHours(data: Record<string, any>): Record<string, any> {

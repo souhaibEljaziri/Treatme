@@ -6,6 +6,7 @@ import { TimePicker } from '@syncfusion/ej2-angular-calendars';
 import { EJ2Instance } from '@syncfusion/ej2-angular-schedule';
 import { AddEditDoctorComponent } from '../add-edit-doctor/add-edit-doctor.component';
 import { DataService } from '../data.service';
+import { DoctorsService } from '../doctors/doctors.service';
 
 @Component({
   selector: 'app-doctor-details',
@@ -18,23 +19,26 @@ export class DoctorDetailsComponent implements OnInit {
   @ViewChild('breakHourObj') breakHourObj: DialogComponent;
   @ViewChild('deleteConfirmationDialogObj') deleteConfirmationDialogObj: DialogComponent;
 
-  public activeData: Record<string, any>;
-  public doctorData: Record<string, any>[];
+  public activeData: any;
+  public doctorData: any[];
   public intl: Internationalization = new Internationalization();
   public specializationData: Record<string, any>[];
   public animationSettings: Record<string, any> = { effect: 'None' };
   public breakDays: Record<string, any>[];
   public doctorId: number;
 
-  constructor(public dataService: DataService, public router: Router, private route: ActivatedRoute) {
-    this.doctorData = this.dataService.getDoctorsData();
-    this.specializationData = this.dataService.specialistData;
+  constructor(public dataService: DataService, public router: Router, private route: ActivatedRoute,private doctorsService:DoctorsService) {
+    this.fn();
   }
+  async fn() {
+    this.doctorData = await this.dataService.getDoctorsData();
+    this.specializationData = this.dataService.specialistData;
 
-  public ngOnInit(): void {
+  }
+  public async ngOnInit() {
     this.dataService.updateActiveItem('doctors');
     this.route.params.subscribe((params: any) => this.doctorId = parseInt(params.id, 10));
-    this.doctorData = this.dataService.getDoctorsData();
+    this.doctorData = await this.dataService.getDoctorsData();
     this.activeData = this.doctorData.filter(item => item.Id === this.doctorId)[0];
     const isDataDiffer: boolean = JSON.stringify(this.activeData) === JSON.stringify(this.dataService.getActiveDoctorData());
     if (!isDataDiffer) {
@@ -51,13 +55,14 @@ export class DoctorDetailsComponent implements OnInit {
     this.deleteConfirmationDialogObj.show();
   }
 
-  public onDeleteClick(): void {
+  public async onDeleteClick() {
     const filteredData: Record<string, any>[] = this.doctorData.filter((item: Record<string, any>) =>
       item.Id !== parseInt(this.activeData.Id as string, 10));
     this.doctorData = filteredData;
     this.activeData = this.doctorData[0];
     this.dataService.setActiveDoctorData(this.activeData);
     this.dataService.setDoctorsData(this.doctorData);
+    await this.doctorsService.delete(this.activeData.Id).toPromise()
     this.deleteConfirmationDialogObj.hide();
   }
 
@@ -161,11 +166,11 @@ export class DoctorDetailsComponent implements OnInit {
     const filteredData: Record<string, any>[] = workDays.filter((item: any) => item.Enable !== false);
     const result = filteredData.map(item => item.Day.slice(0, 3).toLocaleUpperCase()).join(',');
     // eslint-disable-next-line max-len
-    return `${result} - ${this.intl.formatDate(new Date(filteredData[0].WorkStartHour), { skeleton: 'hm' })} - ${this.intl.formatDate(new Date(filteredData[0].WorkEndHour), { skeleton: 'hm' })}`;
+    return (filteredData&&filteredData[0]&&filteredData[0].WorkEndHour)?(`${result} - ${this.intl.formatDate(new Date(filteredData[0].WorkStartHour), { skeleton: 'hm' })} - ${this.intl.formatDate(new Date(filteredData[0].WorkEndHour), { skeleton: 'hm' })}`):'';
   }
 
-  public getSpecializationText(text: Record<string, any>): string {
-    return this.specializationData.filter((item: Record<string, any>) => item.Id === text)[0].Text as string;
+  public getSpecializationText(text: string): string {
+    return text;
   }
 
   public getEducation(text: string): string {

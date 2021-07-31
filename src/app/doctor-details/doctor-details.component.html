@@ -12,7 +12,7 @@
       <button ejs-button cssClass="e-small edit-details" (click)='onDoctorEdit()'>Edit</button>
     </div>
   </header>
-  <div class="active-doctor">
+  <div *ngIf="activeData" class="active-doctor">
     <div class="active-doctor-image">
       <img class="value" src="./assets/images/{{activeData.Text}}.png" alt="doctor" />
       <span class='availability {{activeData.Availability}}'></span>

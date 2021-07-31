@@ -34,7 +34,7 @@ export class OxygenComponent implements OnInit {
   constructor(public dataService: DataService) {
     this.oxygenData = this.filteredOxygen = this.dataService.getOxygenData();
     this.hospitalData = this.dataService.getHospitalData();
-    this.doctorsData = this.dataService.getDoctorsData();
+   this.fn();
     this.activeOxygenData = this.filteredOxygen[0];
     this.editSettings = {
       allowEditing: true,
@@ -43,7 +43,9 @@ export class OxygenComponent implements OnInit {
       mode: 'Dialog'
     };
   }
-
+  async fn(){
+    this.doctorsData =await this.dataService.getDoctorsData();
+  }
   public ngOnInit(): void {
     this.dataService.updateActiveItem('oxygen');
   }
