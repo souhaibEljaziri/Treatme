@@ -149,6 +149,19 @@ export class DataService {
     return this.patientsData;
   }
 
+  public getPatientsNamesData(): Record<string, any>[] {
+    return this.patientsNamesData;
+  }
+
+  public getSuppliersNamesData(): Record<string, any>[] {
+    return this.suppliersNamesData;
+  }
+
+  public getOxygenIdsData(): Record<string, any>[] {
+    return this.oxygenIdsData;
+  }
+
+
   public setOxygenData(data: Record<string, any>[]): void {
     this.oxygenData = data;
   }

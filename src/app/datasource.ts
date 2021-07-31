@@ -534,34 +534,34 @@ export const oxygenData: Record<string, any>[] = [
 
 export const paymentsData: Record<string, any>[] = [
     {
-        BillNo: 1,
-        OxygenID: 12,
-        PatientName: 'Ali',
-        SupplierName: 'souhaib',
-        Date: new Date(2021, 7, 3),
-        Price: '100$',
-        Tax: '10%',
-        Total: '110$',
+        id: 1,
+        oxygen: 2,
+        patient: 1,
+        supplier: 1,
+        date: new Date(2021, 7, 3),
+        price: '100',
+        tax: '10',
+        total: '110',
     },
     {
-        BillNo: 2,
-        OxygenID: 5,
-        PatientName: 'Kamel',
-        SupplierName: 'wissem',
-        Date: new Date(2021, 2, 3),
-        Price: '70$',
-        Tax: '10%',
-        Total: '77$',
+        id: 2,
+        oxygen: 4,
+        patient: 2,
+        supplier: 2,
+        date: new Date(2021, 2, 3),
+        price: '70',
+        tax: '10',
+        total: '77',
     },
     {
-        BillNo: 3,
-        OxygenID: 7,
-        PatientName: 'Karim',
-        SupplierName: 'ferjani',
-        Date: new Date(2020, 1, 3),
-        Price: '50$',
-        Tax: '10%',
-        Total: '55$',
+        id: 3,
+        oxygen: 3,
+        patient: 3,
+        supplier: 3,
+        date: new Date(2020, 1, 3),
+        price: '50',
+        tax: '10',
+        total: '55',
     }
 ];
 
@@ -1036,7 +1036,7 @@ export const colorCategory: Record<string, any>[] = [
 ];
 
 export const bloodGroupData: Record<string, any>[] = [
-    { Value: 'AB+', Text: 'xxxx' },
+    { Value: 'AB+', Text: 'AB+' },
     { Value: 'A+', Text: 'A+' },
     { Value: 'B+', Text: 'B+' },
     { Value: 'O+', Text: 'O+' },
@@ -1047,18 +1047,18 @@ export const bloodGroupData: Record<string, any>[] = [
 ];
 
 export const waterCapacityData: Record<string, any>[] = [
-    { Value: '5 Litres', Text: '5 Litres' },
-    { Value: '10 Litres', Text: '10 Litres' },
-    { Value: '15 Litres', Text: '15 Litres' },
-    { Value: '20 Litres', Text: '20 Litres' },
-    { Value: '25 Litres', Text: '25 Litres' },
+    { Value: '5', Text: '5' },
+    { Value: '10', Text: '10' },
+    { Value: '15', Text: '15' },
+    { Value: '20', Text: '20' },
+    { Value: '25', Text: '25' },
 ];
 
 export const oxygenCapacityData: Record<string, any>[] = [
-    { Value: '500 Litres', Text: '500 Litres' },
-    { Value: '1000 Litres', Text: '1000 Litres' },
-    { Value: '1500 Litres', Text: '1500 Litres' },
-    { Value: '2000 Litres', Text: '2000 Litres' },
+    { Value: '500', Text: '500' },
+    { Value: '1000', Text: '1000' },
+    { Value: '1500', Text: '1500' },
+    { Value: '2000', Text: '2000' },
 ];
 
 export const patientsNamesData: Record<string, any>[] = [
@@ -1072,14 +1072,14 @@ export const suppliersNamesData: Record<string, any>[] = [
     { Value: 1, Text: 'Salem' },
     { Value: 2, Text: 'Houssin' },
     { Value: 3, Text: 'Salma' },
-    { Value: 8, Text: 'Riadh' }
+    { Value: 4, Text: 'Riadh' }
 ];
 
 export const oxygenIdsData: Record<string, any>[] = [
-    { Value: 0, Text: '0' },
     { Value: 1, Text: '1' },
     { Value: 2, Text: '2' },
-    { Value: 3, Text: '3' }
+    { Value: 3, Text: '3' },
+    { Value: 4, Text: '4' }
 ];
 
 export const dayOfWeekList: Record<string, any>[] = [

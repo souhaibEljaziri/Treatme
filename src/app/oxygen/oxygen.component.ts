@@ -1,12 +1,13 @@
-import { Component, ViewEncapsulation, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { createElement, Internationalization, isNullOrUndefined } from '@syncfusion/ej2-base';
 import { DataManager, Query, ReturnOption } from '@syncfusion/ej2-data';
 import { Dialog, DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { Button } from '@syncfusion/ej2-angular-buttons';
 import { EditService, PageService, EditSettingsModel, GridComponent, DialogEditEventArgs } from '@syncfusion/ej2-angular-grids';
 import { AddEditOxygenComponent } from '../add-edit-oxygen/add-edit-oxygen.component';
-//import { RequestOxygenComponent } from '../request-oxygen/request-oxygen.component';
-import { DataService } from '../data.service';
+import { RestService, Oxygen } from '../rest.service';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-oxygen',
@@ -15,7 +16,7 @@ import { DataService } from '../data.service';
   providers: [EditService, PageService],
   encapsulation: ViewEncapsulation.None
 })
-export class OxygenComponent implements OnInit {
+export class OxygenComponent implements OnInit, OnDestroy {
   @ViewChild('gridObj') gridObj: GridComponent;
   @ViewChild('addEditOxygenObj') addEditOxygenObj: AddEditOxygenComponent;
   //@ViewChild('onRequestOxygenObj') onRequestOxygenObj: RequestOxygenComponent;
@@ -31,11 +32,9 @@ export class OxygenComponent implements OnInit {
   public gridDialog: Dialog;
   public animationSettings: Record<string, any> = { effect: 'None' };
 
-  constructor(public dataService: DataService) {
-    this.oxygenData = this.filteredOxygen = this.dataService.getOxygenData();
-    this.hospitalData = this.dataService.getHospitalData();
-    this.doctorsData = this.dataService.getDoctorsData();
-    this.activeOxygenData = this.filteredOxygen[0];
+  private subscription:Subscription;
+  constructor(public restService: RestService, private router: Router) {
+    this.getOxygen();
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
@@ -45,32 +44,27 @@ export class OxygenComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.dataService.updateActiveItem('oxygen');
+    this.restService.updateActiveItem('oxygen');
   }
 
-  public onOxygenClick(args: MouseEvent): void {
-    const rowIndex: string = (args.currentTarget as HTMLElement).parentElement.getAttribute('index');
-    setTimeout(() => {
-      this.gridObj.selectRow(parseInt(rowIndex, 10));
-      this.gridObj.startEdit();
-    });
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   public onDataEdit(args: DialogEditEventArgs): void {
     if (args.requestType === 'beginEdit') {
-      this.activeOxygenData = args.rowData as Record<string, any>;
-      this.dataService.setActiveOxygenData(this.activeOxygenData);
+      let data = args.rowData as Record<string, any>;
+      this.activeOxygenData = data;
+      console.log(this.activeOxygenData)
+      this.getOxygenById(data.id);
+      console.log(data);
       this.gridDialog = args.dialog as Dialog;
       this.gridDialog.header = 'Oxygen Details';
-      const fields: Array<string> = ['Id', 'Name', 'WaterCapacity', 'OxygenCapacity', 'Status', 'Price'];
+      const fields: Array<string> = ['id', 'supplier', 'waterCapacity', 'oxygenCapacity', 'status', 'price'];
       fields.forEach(field => {
         let value: string;
-        if (field === 'DOB' && !isNullOrUndefined(this.activeOxygenData[field])) {
-          value = this.intl.formatDate(this.activeOxygenData[field] as Date, { skeleton: 'yMd' }).toString();
-        } else {
           value = isNullOrUndefined(this.activeOxygenData[field]) ? '' : this.activeOxygenData[field].toString();
-        }
-        (args.dialog as Dialog).element.querySelector('#' + field).innerHTML = value;
+          (args.dialog as Dialog).element.querySelector('#' + field).innerHTML = value;
       });
       const editButtonElement: HTMLElement = createElement('button', {
         className: 'edit-oxygen',
@@ -100,9 +94,7 @@ export class OxygenComponent implements OnInit {
   }
 
   public onDeleteClick(): void {
-    this.oxygenData = this.oxygenData.filter((item: Record<string, any>) => item.Id !== this.activeOxygenData.Id);
-    this.filteredOxygen = this.oxygenData;
-    this.dataService.setOxygenData(this.oxygenData);
+    this.deleteOxygen(this.activeOxygenData.id);
     this.gridObj.closeEdit();
     this.deleteConfirmationDialogObj.hide();
   }
@@ -111,30 +103,43 @@ export class OxygenComponent implements OnInit {
     this.deleteConfirmationDialogObj.hide();
   }
 
-  public onAddOxygen(): void {
-    this.addEditOxygenObj.onAddOxygen();
-  }
-
-  public onRequestOxygen(): void {
-    //this.onRequestOxygenObj.onRequestOxygen();
-    this.addEditOxygenObj.onAddOxygen();
-  }
-
   public onEditOxygen(): void {
     this.gridObj.closeEdit();
     this.addEditOxygenObj.showDetails();
   }
 
-  public getDoctorName(id: number): string {
-    const activeDoctor: Record<string, any>[] = this.doctorsData.filter((item: Record<string, any>) => item.Id === id);
-    return activeDoctor[0].Name;
+  public onAddOxygen(): void {
+    this.addEditOxygenObj.onAddOxygen();
+  }
+
+  getOxygen(): void {
+    this.subscription = this.restService.getOxygen().subscribe((resp: any) => {
+      this.oxygenData = this.filteredOxygen = resp;
+      this.activeOxygenData = this.filteredOxygen[0];
+    });
+  }
+
+  getOxygenById(id: string): void {
+    this.subscription = this.restService.getOxygenById(id).subscribe((resp: any) => {
+      this.restService.setActiveOxygenData(resp);
+    });
+  }
+
+  deleteOxygen(id: string): void {
+    this.restService.deleteOxygen(id)
+      .subscribe(() => {
+        this.oxygenData = this.oxygenData.filter((item: Record<string, any>) => item.id !== id);
+        this.filteredOxygen = this.oxygenData;
+        }, (err) => {
+          console.log(err);
+        });
   }
 
   public oxygenSearch(args: KeyboardEvent): void {
     const searchString: string = (args.target as HTMLInputElement).value;
     if (searchString !== '') {
       new DataManager(this.oxygenData).executeQuery(new Query().
-        search(searchString, ['Id', 'Name', 'WaterCapacity', 'OxygenCapacity', 'Status', 'Price'], null, true, true)).then((e: ReturnOption) => {
+        search(searchString, ['id', 'supplier', 'waterCapacity', 'oxygenCapacity', 'status', 'price'], null, true, true)).then((e: ReturnOption) => {
           if ((e.result as any).length > 0) {
             this.filteredOxygen = e.result as Record<string, any>[];
           } else {
@@ -154,7 +159,7 @@ export class OxygenComponent implements OnInit {
   }
 
   public gridRefresh(): void {
-    this.oxygenData = this.dataService.getOxygenData();
+    this.restService.getOxygen();
     this.filteredOxygen = this.oxygenData;
     this.gridObj.refresh();
   }
