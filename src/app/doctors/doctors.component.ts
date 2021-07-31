@@ -25,11 +25,14 @@ export class DoctorsComponent implements OnInit {
   public tooltipObj: Tooltip;
 
   constructor(public dataService: DataService, private router: Router) {
-    this.doctorsData = this.filteredDoctors = this.dataService.getDoctorsData();
+    this.fn();
+ 
+  }
+  async fn(){
+    this.doctorsData = this.filteredDoctors =await this.dataService.getDoctorsData();
     this.activeDoctorData = this.doctorsData[0];
     this.specializationData = this.dataService.specialistData;
   }
-
   public ngOnInit(): void {
     this.dataService.updateActiveItem('doctors');
     this.tooltipObj = new Tooltip({
@@ -77,10 +80,12 @@ export class DoctorsComponent implements OnInit {
     this.addEditDoctorObj.onAddDoctor();
   }
 
-  public updateDoctors(): void {
-    this.doctorsData = this.dataService.getDoctorsData();
+  public async updateDoctors() {
+    this.doctorsData =await this.dataService.getDoctorsData();
     if (this.selectedDepartmentId) {
       this.filteredDoctors = this.doctorsData.filter((item: any) => item.DepartmentId === this.selectedDepartmentId);
+    }else{
+      this.filteredDoctors =this.doctorsData;
     }
   }
 

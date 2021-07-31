@@ -29,7 +29,7 @@
       </ejs-dropdownlist>
       <button ejs-button cssClass="e-normal" (click)='onAddDoctor()' [isPrimary]="true">Add New Doctor</button>
     </div>
-    <div #specialistItemObj class='specialist-display'>
+    <div *ngIf='filteredDoctors&&filteredDoctors[0]' #specialistItemObj class='specialist-display'>
       <div (click)='onSpecialistClick($event)' *ngFor="let data of filteredDoctors">
         <div class="e-cards specialist-item" id=Specialist_{{data.Id}}>
           <div class="e-card-content">
