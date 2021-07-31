@@ -72,6 +72,7 @@ this.fnP();
       fields.forEach(field => {
         let value: string;
         if (field === 'DOB' && !isNullOrUndefined(this.activePatientData[field])) {
+          if(this.intl&&this.activePatientData&&this.activePatientData[field]&&this.intl.formatDate(this.activePatientData[field] as Date, { skeleton: 'yMd' }))
           value = this.intl.formatDate(this.activePatientData[field] as Date, { skeleton: 'yMd' }).toString();
         } else {
           value = isNullOrUndefined(this.activePatientData[field]) ? '' : this.activePatientData[field].toString();

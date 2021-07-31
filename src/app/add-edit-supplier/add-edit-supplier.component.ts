@@ -43,10 +43,13 @@ export class AddEditSupplierComponent {
   public doctorsData: Record<string, any>[];
 
   constructor(private dataService: DataService) {
+   this.fn();
+  }
+  async fn(){
     this.bloodGroupData = this.dataService.bloodGroupData;
     this.suppliersData = this.dataService.getSuppliersData();
     this.hospitalData = this.dataService.getHospitalData();
-    this.doctorsData = this.dataService.getDoctorsData();
+    this.doctorsData =await this.dataService.getDoctorsData();
     this.activeSupplierData = this.dataService.getActiveSupplierData();
   }
 
