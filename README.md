@@ -1,6 +1,6 @@
 #  Angular -  Treatme
 
-This Treatme demo application
+Treatme demo application
 
 ## Deployment
 
