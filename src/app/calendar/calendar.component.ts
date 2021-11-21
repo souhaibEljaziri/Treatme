@@ -150,8 +150,8 @@ export class CalendarComponent implements OnInit {
     if (this.specialistObj) {
       this.specialistObj.hide();
     }
-    if (Browser.isDevice && this.dropdownObj) {
-      this.toastWidth = '300px';
+    if ( this.dropdownObj) {
+      this.toastWidth = '30%';
       addClass([this.dropdownObj.element], 'e-specialist-hide');
     }
   }
@@ -211,7 +211,7 @@ export class CalendarComponent implements OnInit {
       this.isTreeItemDropped = false;
     }
     if (args.requestType === 'toolbarItemRendering') {
-      if (Browser.isDevice) {
+      // if (Browser.isDevice) {
         const doctorIcon: ItemModel = {
           align: 'Center',
           cssClass: 'app-doctor-icon',
@@ -229,24 +229,24 @@ export class CalendarComponent implements OnInit {
         };
         args.items.push(waitingListItem);
         args.items.splice(5, 1);
-      } else {
-        const specialistItem: ItemModel = { align: 'Center', cssClass: 'app-doctors' };
-        args.items.unshift(specialistItem);
-        args.items.splice(4, 2);
-      }
+      // } else {
+      //   const specialistItem: ItemModel = { align: 'Center', cssClass: 'app-doctors' };
+      //   args.items.unshift(specialistItem);
+      //   args.items.splice(4, 2);
+      // }
     }
   }
 
   public onActionComplete(args: ActionEventArgs): void {
     if (args.requestType === 'toolBarItemRendered') {
-      if (Browser.isDevice) {
+      // if (Browser.isDevice) {
         const doctorIconContainer: HTMLElement = this.scheduleObj.element.querySelector('.app-doctor-icon') as HTMLElement;
         const doctorIcon: HTMLElement = doctorIconContainer.querySelector('.doctor-icon');
         const doctorImage: HTMLElement = createElement('img', { className: 'active-doctor', attrs: { src: './assets/Icons/Doctors.svg' } });
         doctorIcon.appendChild(doctorImage);
         doctorIconContainer.style.display = 'block';
         doctorIconContainer.onclick = () => this.specialistObj.show();
-      }
+      // }
     }
     if (document.body.style.cursor === 'not-allowed') {
       document.body.style.cursor = '';
